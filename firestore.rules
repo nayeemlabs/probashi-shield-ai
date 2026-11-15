@@ -44,6 +44,24 @@ service cloud.firestore {
       allow write: if isEmbassy();
     }
 
+    // /docs system — public read, admin-only write
+    match /docsConfig/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /docsSections/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /team/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /features/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Default deny
     match /{document=**} {
       allow read, write: if false;

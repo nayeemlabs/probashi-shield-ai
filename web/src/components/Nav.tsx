@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
+import { usePrefs } from '../lib/prefs'
 
 export function Nav() {
   const { user, signOut, loading } = useAuth()
+  const { t, lang, toggleLang, theme, toggleTheme } = usePrefs()
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
@@ -15,17 +17,23 @@ export function Nav() {
             </div>
           </div>
         </Link>
-        <nav className="flex items-center gap-2 text-sm">
-          <Link to="/audit" className="hidden rounded-lg px-3 py-2 text-ink/70 hover:bg-mist sm:block">চুক্তি যাচাই</Link>
-          <Link to="/family" className="hidden rounded-lg px-3 py-2 text-ink/70 hover:bg-mist sm:block">পরিবার ট্র্যাকিং</Link>
-          <Link to="/eoc" className="hidden rounded-lg px-3 py-2 text-ink/70 hover:bg-mist sm:block">জরুরি সেবা</Link>
+        <nav className="flex items-center gap-1 text-sm sm:gap-2">
+          <Link to="/audit" className="hidden rounded-lg px-3 py-2 text-ink/70 hover:bg-mist md:block">{t('nav.audit')}</Link>
+          <Link to="/family" className="hidden rounded-lg px-3 py-2 text-ink/70 hover:bg-mist lg:block">{t('nav.family')}</Link>
+          <Link to="/eoc" className="hidden rounded-lg px-3 py-2 text-ink/70 hover:bg-mist lg:block">{t('nav.eoc')}</Link>
+          <button onClick={toggleLang} className="rounded-lg border border-line px-2.5 py-1.5 text-xs font-bold text-ink/70 hover:bg-mist" aria-label="language">
+            {lang === 'bn' ? 'EN' : 'বাং'}
+          </button>
+          <button onClick={toggleTheme} className="rounded-lg border border-line px-2.5 py-1.5 text-xs font-bold text-ink/70 hover:bg-mist" aria-label="theme">
+            {theme === 'dark' ? '☀' : '☾'}
+          </button>
           {loading ? null : user ? (
             <button onClick={() => signOut()} className="rounded-lg bg-brand px-4 py-2 font-medium text-white hover:bg-brand-dark">
-              লগ আউট
+              {t('nav.logout')}
             </button>
           ) : (
             <Link to="/login" className="rounded-lg bg-brand px-4 py-2 font-medium text-white hover:bg-brand-dark">
-              লগইন
+              {t('nav.login')}
             </Link>
           )}
         </nav>

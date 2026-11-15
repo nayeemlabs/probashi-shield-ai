@@ -6,6 +6,7 @@ import Audit from './pages/Audit'
 import Family from './pages/Family'
 import Eoc from './pages/Eoc'
 import Agency from './pages/Agency'
+import Admin from './pages/Admin'
 import type { ReactNode } from 'react'
 
 function RequireAuth({ children }: { children: ReactNode }) {
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/family" element={<RequireAuth><Family /></RequireAuth>} />
           <Route path="/eoc" element={<RequireAuth><Eoc /></RequireAuth>} />
           <Route path="/agency" element={<Agency />} />
+          <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

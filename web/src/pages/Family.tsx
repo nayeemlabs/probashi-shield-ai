@@ -38,7 +38,7 @@ export default function Family() {
       <Nav />
       <main className="mx-auto max-w-3xl px-4 py-10">
         <h1 className="text-3xl font-bold text-brand">পরিবার ট্র্যাকিং</h1>
-        <p className="mt-2 text-ink/70">আপনার প্রিয়জনদের বর্তমান অবস্থা — মাসিক চেক-ইন ও SOS আপডেট।</p>
+        <p className="mt-2 text-ink/70">আপনার প্রিয়জনদের বর্তমান অবস্থা, মাসিক চেক-ইন ও SOS আপডেট।</p>
 
         {loading || !user ? (
           <div className="mt-8 rounded-2xl border border-warn/30 bg-warn/5 p-6 text-center font-medium text-warn">
@@ -50,7 +50,7 @@ export default function Family() {
           <div className="mt-8 rounded-2xl border border-line bg-white p-8 text-center">
             <p className="text-lg font-medium text-ink">এখনো কোনো প্রিয়জন যুক্ত হয়নি</p>
             <p className="mt-2 text-sm text-ink/60">
-              প্রবাসীকে বলুন যে সে ProbashiShield-এ যোগ হোক — শীঘ্রই WhatsApp link flow আসছে।
+              প্রবাসীকে বলুন যে সে ProbashiShield-এ যোগ হোক, শীঘ্রই WhatsApp link flow আসছে।
             </p>
           </div>
         ) : (

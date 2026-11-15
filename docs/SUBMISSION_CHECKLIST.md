@@ -1,4 +1,4 @@
-# ProbashiShield AI — Competition Submission Checklist
+# ProbashiShield AI, Competition Submission Checklist
 
 Track: **Idea to Unicorn (I2U)** · Domain: **CivicSphere & FinSphere AI**
 
@@ -6,9 +6,9 @@ Track: **Idea to Unicorn (I2U)** · Domain: **CivicSphere & FinSphere AI**
 
 ProbashiShield sits squarely inside the announced domain:
 
-- **CivicSphere** — protects a vulnerable civic population (migrant workers), interfaces with government systems (BMET, MoFA, embassies), and strengthens civic safety infrastructure.
-- **FinSphere** — fraud prevention in a $4.5B/year migration economy; direct revenue linkage to formal financial rails (bank/MFS account opening, remittance ecosystem).
-- **I2U track** — presents a credible path from problem → MVP → revenue-positive platform → regional scale, with defensible data moats.
+- **CivicSphere**, protects a vulnerable civic population (migrant workers), interfaces with government systems (BMET, MoFA, embassies), and strengthens civic safety infrastructure.
+- **FinSphere**, fraud prevention in a $4.5B/year migration economy; direct revenue linkage to formal financial rails (bank/MFS account opening, remittance ecosystem).
+- **I2U track**, presents a credible path from problem → MVP → revenue-positive platform → regional scale, with defensible data moats.
 
 **Verdict: strong fit.** The civic-welfare angle differentiates it from generic fintech/AI pitches.
 
@@ -38,4 +38,4 @@ ProbashiShield sits squarely inside the announced domain:
 ## Sources
 
 - Project brief provided by team (EquiSaaS BD / CloudCamp BD community announcement).
-- CloudCamp BD MCP knowledge base (guidelines) — server configured at `.devin/mcp_config.json`; tools pending session reload.
+- CloudCamp BD MCP knowledge base (guidelines), server configured at `.devin/mcp_config.json`; tools pending session reload.

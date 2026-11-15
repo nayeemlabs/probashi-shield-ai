@@ -40,7 +40,7 @@ export default function Eoc() {
       <Nav />
       <main className="mx-auto max-w-4xl px-4 py-10">
         <h1 className="text-3xl font-bold text-brand">জরুরি সেবা কেন্দ্র (EOC)</h1>
-        <p className="mt-2 text-ink/70">সক্রিয় SOS ঘটনা — দূতাবাস ও নিয়ন্ত্রণ কক্ষের জন্য রেসকিউ ড্যাশবোর্ড।</p>
+        <p className="mt-2 text-ink/70">সক্রিয় SOS ঘটনা, দূতাবাস ও নিয়ন্ত্রণ কক্ষের জন্য রেসকিউ ড্যাশবোর্ড।</p>
 
         {denied ? (
           <div className="mt-8 rounded-2xl border border-warn/30 bg-warn/5 p-6 text-center">
@@ -53,7 +53,7 @@ export default function Eoc() {
           <div className="mt-8 rounded-2xl border border-line bg-white p-10 text-center">
             <div className="text-4xl">✅</div>
             <p className="mt-3 font-medium text-ink">কোনো সক্রিয় জরুরি ঘটনা নেই</p>
-            <p className="mt-1 text-sm text-ink/60">সবাই নিরাপদে আছে — এই সেকশন নিজে থেকেই আপডেট হবে।</p>
+            <p className="mt-1 text-sm text-ink/60">সবাই নিরাপদে আছে, এই সেকশন নিজে থেকেই আপডেট হবে।</p>
           </div>
         ) : (
           <div className="mt-8 space-y-4">

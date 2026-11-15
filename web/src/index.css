@@ -1,18 +1,16 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
   font-family: 'Li Alinur Tatsama Unicode';
   src: url('/fonts/Li%20Alinur%20Tatsama%20Unicode.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Li Alinur Tatsama Unicode';
   src: url('/fonts/Li%20Alinur%20Tatsama%20Unicode%20Italic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
+  font-weight: 400; font-style: italic; font-display: swap;
 }
 @font-face {
   font-family: 'Inter';
@@ -32,7 +30,7 @@
 
 @theme {
   --color-brand: #0B3D91;
-  --color-brand-dark: #0A2C6B;
+  --color-brand-dark: #071F4D;
   --color-brand-light: #1E5FB8;
   --color-safe: #0E7C4A;
   --color-warn: #B45309;
@@ -44,6 +42,33 @@
   --font-latin: 'Inter', system-ui, sans-serif;
 }
 
+/* Dark theme token overrides */
+.dark {
+  --color-mist: #0B1526;
+  --color-ink: #E8EEF7;
+  --color-line: #1E2C47;
+}
+/* Literal white surfaces used across pages get a dark card tone */
+.dark .bg-white { background-color: #101E36; }
+.dark .bg-white\/90 { background-color: rgba(11, 21, 38, 0.9); }
+
 html { font-family: var(--font-bangla); }
 body { background: var(--color-mist); color: var(--color-ink); }
 .font-latin { font-family: var(--font-latin); }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #1E5FB8;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.dark ::-webkit-scrollbar-thumb { background: #3D6BB3; border: 2px solid transparent; background-clip: content-box; }
+::-webkit-scrollbar-thumb:hover { background: #0B3D91; background-clip: content-box; }
+* { scrollbar-width: thin; scrollbar-color: #1E5FB8 transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

@@ -1,0 +1,12 @@
+name = "probashi-api"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[[r2_buckets]]
+binding = "CONTRACTS"
+bucket_name = "probashi-contracts"
+
+[vars]
+FIREBASE_PROJECT_ID = "probashi-shield"
+ADMIN_EMAILS = "jannatulnayeemdev@gmail.com"

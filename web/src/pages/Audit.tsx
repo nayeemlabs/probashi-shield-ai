@@ -1,9 +1,9 @@
 import { useState, type ChangeEvent } from 'react'
 import { Nav } from '../components/Nav'
 import { useAuth } from '../lib/auth'
-import { db, storage } from '../lib/firebase'
+import { db } from '../lib/firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { uploadContract, fileUrl } from '../lib/api'
 
 export default function Audit() {
   const { user } = useAuth()
@@ -26,19 +26,17 @@ export default function Audit() {
     setState('uploading')
     setMsg('')
     try {
-      const path = `contracts/${user.uid}/${Date.now()}-${file.name}`
-      const storageRef = ref(storage, path)
-      await uploadBytes(storageRef, file)
-      const url = await getDownloadURL(storageRef)
+      const { key } = await uploadContract(file)
       await addDoc(collection(db, 'audits'), {
         ownerId: user.uid,
-        imageUrl: url,
+        imageKey: key,
+        imageUrl: fileUrl(key),
         brokerPromise: promise,
         status: 'queued',
         createdAt: serverTimestamp(),
       })
       setState('done')
-      setMsg('চুক্তিটি গৃহীত হয়েছে — AI অডিট চলছে, ফলাফল শীঘ্রই এখানে পাবেন।')
+      setMsg('চুক্তিটি গৃহীত হয়েছে, AI অডিট চলছে, ফলাফল শীঘ্রই এখানে পাবেন।')
     } catch {
       setState('error')
       setMsg('আপলোড ব্যর্থ হয়েছে। আবার চেষ্টা করুন।')
@@ -51,7 +49,7 @@ export default function Audit() {
       <main className="mx-auto max-w-3xl px-4 py-10">
         <h1 className="text-3xl font-bold text-brand">চুক্তি ও ভিসা অডিট</h1>
         <p className="mt-2 text-ink/70">
-          আরবি বা ইংরেজি চুক্তি/ভিসার ছবি তুলুন। AI পড়ে বাংলায় বলে দেবে — আসল পেশা, বেতন, আর লুকানো ঝুঁকি।
+          আরবি বা ইংরেজি চুক্তি/ভিসার ছবি তুলুন। AI পড়ে বাংলায় বলে দেবে, আসল পেশা, বেতন, আর লুকানো ঝুঁকি।
         </p>
 
         {!user ? (
@@ -93,7 +91,7 @@ export default function Audit() {
             )}
 
             <p className="text-center text-xs text-ink/50">
-              এই রিপোর্ট ফ্যাক্ট-বেসড অডিট — আইনি পরামর্শ নয়। ভুয়া চুক্তি শনাক্তে সাহায্য করে, আইনি নিশ্চয়তা দেয় না।
+              এই রিপোর্ট ফ্যাক্ট-বেসড অডিট, আইনি পরামর্শ নয়। ভুয়া চুক্তি শনাক্তে সাহায্য করে, আইনি নিশ্চয়তা দেয় না।
             </p>
           </div>
         )}

@@ -30,7 +30,7 @@ const features = [
 ]
 features.forEach(([name, status, desc], i) => batch.set(db.doc(`features/f${i}`), { name, status, desc }))
 
-// Team — Clyber
+// Team, Clyber
 const team = [
   ['Jannatul Nayeem', 'Team Lead', 'jannatulnayeemdev@gmail.com', ''],
   ['Sanzida Rahman', 'Product/UX Designer', '', ''],

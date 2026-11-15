@@ -51,7 +51,7 @@ export default function Docs() {
       <Nav />
       <main className="flex flex-1 items-center justify-center px-4">
         <div className="text-center">
-          <div className="text-5xl">📕</div>
+          <div className="text-5xl"></div>
           <h1 className="mt-4 text-2xl font-bold text-brand">ডকুমেন্টেশন এখন উপলব্ধ নয়</h1>
           <p className="mt-2 text-ink/60">এই সেকশনটি নির্ধারিত সময়ে বা shutdown অবস্থায় আছে।</p>
           <Link to="/" className="mt-6 inline-block rounded-lg bg-brand px-6 py-2.5 font-bold text-white">হোমে ফিরে যান</Link>
@@ -61,7 +61,7 @@ export default function Docs() {
   )
 
   function exportMd() {
-    const md = ['# ProbashiShield AI — Documentation & Pitch Deck\n',
+    const md = ['# ProbashiShield AI, Documentation & Pitch Deck\n',
       ...filtered.map((s) => `## ${s.title}\n\n${s.body ?? ''}\n`),
       '## Team\n', ...team.map((m) => `- ${m.name}, ${m.role}, ${m.email}`)].join('\n')
     const a = document.createElement('a')
@@ -96,7 +96,7 @@ export default function Docs() {
           <header className="rounded-2xl bg-gradient-to-br from-brand-dark via-brand to-brand-light p-8 text-white">
             <p className="font-latin text-sm font-semibold text-blue-200">ProbashiShield AI</p>
             <h1 className="mt-1 text-3xl font-bold">ডকুমেন্টেশন ও পিচ ডেক</h1>
-            <p className="mt-2 text-blue-100">লাইভ, রিয়েল-টাইম সিস্টেম ভিউ — সর্বশেষ আপডেট: {new Date().toLocaleDateString('bn-BD')}</p>
+            <p className="mt-2 text-blue-100">লাইভ, রিয়েল-টাইম সিস্টেম ভিউ, সর্বশেষ আপডেট: {new Date().toLocaleDateString('bn-BD')}</p>
           </header>
 
           {/* Feature matrix (live) */}

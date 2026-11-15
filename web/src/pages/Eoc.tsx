@@ -51,7 +51,7 @@ export default function Eoc() {
           <p className="mt-8 text-center text-ink/50">লোড হচ্ছে…</p>
         ) : incidents.length === 0 ? (
           <div className="mt-8 rounded-2xl border border-line bg-white p-10 text-center">
-            <div className="text-4xl">✅</div>
+            <div className="text-4xl">✓</div>
             <p className="mt-3 font-medium text-ink">কোনো সক্রিয় জরুরি ঘটনা নেই</p>
             <p className="mt-1 text-sm text-ink/60">সবাই নিরাপদে আছে, এই সেকশন নিজে থেকেই আপডেট হবে।</p>
           </div>

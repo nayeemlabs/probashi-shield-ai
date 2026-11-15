@@ -1,4 +1,4 @@
-// ProbashiShield AI — brand asset renderer
+// ProbashiShield AI, brand asset renderer
 // Usage: node tools/render-assets.mjs
 import { Resvg } from '@resvg/resvg-js';
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
@@ -103,7 +103,7 @@ ${chips}
 </svg>`;
 save('og-default.png', render(ogDefault, { width: 1200, height: 630, fontFamily: 'Inter' }), OG);
 
-// Square OG — WhatsApp-safe: all key content inside central ~80%
+// Square OG, WhatsApp-safe: all key content inside central ~80%
 const sqLogo = readFileSync(join(BRAND, 'logo.svg'), 'utf8')
   .replace(/<svg[^>]*>/, '<svg x="380" y="120" width="320" height="320" viewBox="0 0 512 512">')
   .replace('</svg>', '</svg>');
@@ -159,7 +159,7 @@ ${storyLogo}
 save('og-story-1080x1920.png', render(ogStory, { width: 1080, fontFamily: 'Inter' }), OG);
 
 // ---------- Wordmark (logo + Bangla/English name lockup) ----------
-// Bangla name as ONE clean word; English carries the "AI" — no duplicated "এআই"
+// Bangla name as ONE clean word; English carries the "AI", no duplicated "এআই"
 const wordmark = `<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="400" viewBox="0 0 1400 400">
 ${readFileSync(join(BRAND, 'logo.svg'), 'utf8').replace(/<svg[^>]*>/, '<svg x="30" y="50" width="300" height="300" viewBox="0 0 512 512">').replace('</svg>', '</svg>')}
 <text x="390" y="185" font-family="${BENGALI_FONT}" font-weight="400" font-size="110" fill="#0B3D91">প্রবাসীশিল্ড</text>

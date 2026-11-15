@@ -50,7 +50,7 @@ const Ctx = createContext<Prefs | null>(null)
 
 export function PrefsProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>(() => (localStorage.getItem('ps_lang') as Lang) || 'bn')
-  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem('ps_theme') as Theme) || 'dark')
+  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem('ps_theme') as Theme) || 'light')
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')

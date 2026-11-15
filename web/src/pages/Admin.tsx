@@ -33,7 +33,7 @@ export default function Admin() {
       <div className="min-h-screen">
         <Nav />
         <main className="mx-auto max-w-md px-4 py-20 text-center">
-          <div className="text-5xl">🔒</div>
+          <div className="text-5xl"></div>
           <h1 className="mt-4 text-2xl font-bold text-brand">প্রবেশাধিকার নেই</h1>
           <p className="mt-2 text-ink/60">এই পোর্টালটি কেবল super admin-এর জন্য।</p>
         </main>
@@ -57,9 +57,9 @@ export default function Admin() {
         <h2 className="mt-8 mb-4 text-xl font-bold text-ink">প্ল্যাটফর্ম ওভারভিউ</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           {[
-            { label: 'মোট অডিট', value: counts.audits, icon: '📄' },
-            { label: 'প্রবাসী ওয়ার্কার', value: counts.workers, icon: '🧑‍💼' },
-            { label: 'SOS ঘটনা', value: counts.incidents, icon: '🆘' },
+            { label: 'মোট অডিট', value: counts.audits, icon: '' },
+            { label: 'প্রবাসী ওয়ার্কার', value: counts.workers, icon: '' },
+            { label: 'SOS ঘটনা', value: counts.incidents, icon: '' },
           ].map((c) => (
             <div key={c.label} className="rounded-2xl border border-line bg-white p-5">
               <div className="text-2xl">{c.icon}</div>

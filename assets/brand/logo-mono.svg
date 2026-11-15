@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ProbashiShield AI logo - monochrome">
+  <path d="M256 30
+           C256 30 420 94 420 94
+           L420 252
+           C420 366 356 448 256 482
+           C156 448 92 366 92 252
+           L92 94
+           C92 94 222 30 256 30 Z"
+        fill="#0B3D91"/>
+  <path d="M256 132
+           C206 132 166 173 166 224
+           C166 280 256 368 256 368
+           C256 368 346 280 346 224
+           C346 173 306 132 256 132 Z"
+        fill="#FFFFFF"/>
+  <circle cx="256" cy="196" r="26" fill="#0B3D91"/>
+  <path d="M210 282
+           C210 252 230 238 256 238
+           C282 238 302 252 302 282 Z"
+        fill="#0B3D91"/>
+</svg>

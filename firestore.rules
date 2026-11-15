@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    function isEmbassy() { return signedIn() && (request.auth.token.embassy == true || request.auth.token.admin == true); }
+
+    // User profiles — owner only
+    match /users/{uid} {
+      allow read, write: if isSelf(uid);
+    }
+
+    // Contract audits — owner only
+    match /audits/{id} {
+      allow create: if signedIn() && request.resource.data.ownerId == request.auth.uid;
+      allow read, update, delete: if signedIn() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Workers (migrants) — owner + linked family
+    match /workers/{id} {
+      allow read: if signedIn() && (
+        resource.data.ownerId == request.auth.uid ||
+        request.auth.uid in resource.data.familyIds
+      );
+      allow create, update, delete: if signedIn() && request.resource.data.ownerId == request.auth.uid;
+    }
+
+    // SOS incidents — owner + embassy/admin role (custom claim)
+    match /sosIncidents/{id} {
+      allow create: if signedIn();
+      allow read: if signedIn() && (
+        resource.data.ownerId == request.auth.uid ||
+        isEmbassy()
+      );
+      allow update: if isEmbassy();
+    }
+
+    // Agencies — public read for trust badge lookup, write restricted
+    match /agencies/{id} {
+      allow read: if true;
+      allow write: if isEmbassy();
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

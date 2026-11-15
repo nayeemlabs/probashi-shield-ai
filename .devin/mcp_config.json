@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cloudcamp-bd": {
+      "url": "https://cloudcamp-bd-mcp.equisaas-bd.com/api/sse/cc-auth-2026",
+      "transport": "sse"
+    }
+  }
+}

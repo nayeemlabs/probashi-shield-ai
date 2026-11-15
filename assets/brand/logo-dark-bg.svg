@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ProbashiShield AI logo - dark background variant">
+  <defs>
+    <filter id="badgeShadowD" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- White shield silhouette for dark backgrounds -->
+  <path d="M256 30
+           C256 30 420 94 420 94
+           L420 252
+           C420 366 356 448 256 482
+           C156 448 92 366 92 252
+           L92 94
+           C92 94 222 30 256 30 Z"
+        fill="#FFFFFF"/>
+
+  <!-- Pin knocked out (shows dark bg) -->
+  <path d="M256 132
+           C206 132 166 173 166 224
+           C166 280 256 368 256 368
+           C256 368 346 280 346 224
+           C346 173 306 132 256 132 Z"
+        fill="#0B3D91"/>
+
+  <!-- Worker silhouette in white -->
+  <circle cx="256" cy="196" r="26" fill="#FFFFFF"/>
+  <path d="M210 282
+           C210 252 230 238 256 238
+           C282 238 302 252 302 282 Z"
+        fill="#FFFFFF"/>
+
+  <!-- Verified badge -->
+  <g filter="url(#badgeShadowD)">
+    <circle cx="334" cy="318" r="38" fill="#0E7C4A" stroke="#0B3D91" stroke-width="9"/>
+    <path d="M317 318 L330 331 L353 301"
+          fill="none" stroke="#FFFFFF" stroke-width="11"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

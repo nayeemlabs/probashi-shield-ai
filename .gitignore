@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.local
+*.local
+probashi-shield-firebase-adminsdk-*.json
+secrets/
+dist/
+.wrangler/
+.firebase/
+firestore-debug.log
+ui-debug.log
+
+# Font license: Alinur Tatsama (Lipighor) files must not be redistributed
+*Alinur*
+AlinurTatsama.zip

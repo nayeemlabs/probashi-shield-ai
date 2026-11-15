@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="170" viewBox="0 0 1000 170">
+<svg x="14" y="15" width="140" height="140" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#1A4FA8"/>
+      <stop offset="0.45" stop-color="#0B3D91"/>
+      <stop offset="1" stop-color="#0A2C6B"/>
+    </linearGradient>
+    <linearGradient id="shieldSheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.30"/>
+      <stop offset="0.30" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="0.55" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="pinGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#D8E6F5"/>
+    </linearGradient>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#04122B" flood-opacity="0.35"/>
+    </filter>
+    <filter id="badgeShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#04122B" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Shield body -->
+  <path d="M256 30
+           C256 30 420 94 420 94
+           L420 252
+           C420 366 356 448 256 482
+           C156 448 92 366 92 252
+           L92 94
+           C92 94 222 30 256 30 Z"
+        fill="url(#shieldGrad)" filter="url(#softShadow)"/>
+
+  <!-- Top sheen -->
+  <path d="M256 30
+           C256 30 420 94 420 94
+           L420 252
+           C420 366 356 448 256 482
+           C156 448 92 366 92 252
+           L92 94
+           C92 94 222 30 256 30 Z"
+        fill="url(#shieldSheen)"/>
+
+  <!-- Shield rim light -->
+  <path d="M256 50
+           C256 50 402 108 402 108
+           L402 250
+           C402 356 348 426 256 458
+           C164 426 110 356 110 250
+           L110 108
+           C110 108 236 50 256 50 Z"
+        fill="none" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="5"/>
+
+  <!-- Location pin -->
+  <path d="M256 132
+           C206 132 166 173 166 224
+           C166 280 256 368 256 368
+           C256 368 346 280 346 224
+           C346 173 306 132 256 132 Z"
+        fill="url(#pinGrad)"/>
+
+  <!-- Migrant worker silhouette -->
+  <circle cx="256" cy="196" r="26" fill="#0B3D91"/>
+  <path d="M210 282
+           C210 252 230 238 256 238
+           C282 238 302 252 302 282 Z"
+        fill="#0B3D91"/>
+
+  <!-- Verified badge -->
+  <g filter="url(#badgeShadow)">
+    <circle cx="334" cy="318" r="38" fill="#0E7C4A" stroke="#FFFFFF" stroke-width="9"/>
+    <path d="M317 318 L330 331 L353 301"
+          fill="none" stroke="#FFFFFF" stroke-width="11"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
+
+<text x="190" y="80" font-family="Li Alinur Tatsama Unicode" font-weight="400" font-size="52" fill="#0B3D91">প্রবাসীশিল্ড</text>
+<text x="192" y="135" font-family="Inter" font-weight="800" font-size="44" fill="#111827">ProbashiShield <tspan fill="#1E5FB8">AI</tspan></text>
+</svg>

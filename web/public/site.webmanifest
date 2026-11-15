@@ -1,0 +1,15 @@
+{
+  "name": "ProbashiShield AI — প্রবাসীশিল্ড এআই",
+  "short_name": "ProbashiShield",
+  "description": "The 24/7 Autonomous AI Guardian for 1.2 Crore Migrant Workers — contract fraud detection, visa verification and crisis response.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B3D91",
+  "theme_color": "#0B3D91",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

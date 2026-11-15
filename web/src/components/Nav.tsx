@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { usePrefs } from '../lib/prefs'
+import { Link as L } from 'react-router-dom'
 
 export function Nav() {
   const { user, signOut, loading } = useAuth()
@@ -27,6 +28,7 @@ export function Nav() {
           <button onClick={toggleTheme} className="rounded-lg border border-line px-2.5 py-1.5 text-xs font-bold text-ink/70 hover:bg-mist" aria-label="theme">
             {theme === 'dark' ? '☀' : '☾'}
           </button>
+          {user && (user.photoURL || true) && (<L to="/settings" className="hidden sm:block"><img src={user.photoURL || "/brand/logo-1024.png"} alt="" className="h-9 w-9 rounded-full border border-line object-cover" /></L>)}
           {loading ? null : user ? (
             <button onClick={() => signOut()} className="rounded-lg bg-brand px-4 py-2 font-medium text-white hover:bg-brand-dark">
               {t('nav.logout')}

@@ -9,6 +9,7 @@ import Agency from './pages/Agency'
 import Admin from './pages/Admin'
 import Docs from './pages/Docs'
 import AdminDocs from './pages/AdminDocs'
+import Settings from './pages/Settings'
 import type { ReactNode } from 'react'
 
 function RequireAuth({ children }: { children: ReactNode }) {
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/eoc" element={<RequireAuth><Eoc /></RequireAuth>} />
           <Route path="/agency" element={<Agency />} />
           <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
+          <Route path="/settings" element={<RequireAuth><Settings /></RequireAuth>} />
           <Route path="/admin/docs" element={<RequireAuth><AdminDocs /></RequireAuth>} />
           <Route path="/docs" element={<Docs />} />
           <Route path="*" element={<Navigate to="/" replace />} />

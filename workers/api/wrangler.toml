@@ -10,3 +10,6 @@ bucket_name = "probashi-contracts"
 [vars]
 FIREBASE_PROJECT_ID = "probashi-shield"
 ADMIN_EMAILS = "jannatulnayeemdev@gmail.com"
+
+[ai]
+binding = "AI"

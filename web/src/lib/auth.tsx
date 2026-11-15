@@ -8,7 +8,8 @@ import {
   signOut as fbSignOut,
   type User,
 } from 'firebase/auth'
-import { auth } from './firebase'
+import { auth, db } from './firebase'
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
 
 interface AuthCtx {
   user: User | null
@@ -25,9 +26,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => onAuthStateChanged(auth, (u) => {
+  useEffect(() => onAuthStateChanged(auth, async (u) => {
     setUser(u)
     setLoading(false)
+    if (u) {
+      try {
+        const ref = doc(db, 'users', u.uid)
+        const snap = await getDoc(ref)
+        const data = snap.data() ?? {}
+        const photo = data.photoURL || u.photoURL || null
+        if (!snap.exists() || data.photoURL !== photo || data.email !== u.email) {
+          await setDoc(ref, { uid: u.uid, email: u.email, name: u.displayName, photoURL: photo, updatedAt: serverTimestamp() }, { merge: true })
+        }
+      } catch { /* non-blocking */ }
+    }
   }), [])
 
   const value: AuthCtx = {

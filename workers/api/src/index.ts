@@ -10,6 +10,7 @@ interface Env {
   ADMIN_EMAILS: string
   AI: any
   GEMINI_API_KEY?: string
+  GROQ_API_KEY?: string
 }
 
 function bytesToB64(buf: ArrayBuffer): string {
@@ -196,6 +197,27 @@ export default {
           const text = gj?.candidates?.[0]?.content?.parts?.[0]?.text
           if (text) return json({ analysis: text, engine: 'gemini-2.5-flash' })
         } catch { /* fall through to LLaVA */ }
+      }
+
+      // Secondary: Groq Llama 4 Scout vision (fast, OpenAI-compatible)
+      if (env.GROQ_API_KEY) {
+        try {
+          const g = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: { authorization: `Bearer ${env.GROQ_API_KEY}`, 'content-type': 'application/json' },
+            body: JSON.stringify({
+              model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+              max_tokens: 1200,
+              messages: [{ role: 'user', content: [
+                { type: 'text', text: prompt },
+                { type: 'image_url', image_url: { url: `data:${mime};base64,${bytesToB64(buf)}` } },
+              ] }],
+            }),
+          })
+          const gj = (await g.json()) as any
+          const text = gj?.choices?.[0]?.message?.content
+          if (text) return json({ analysis: text, engine: 'groq-llama4-scout' })
+        } catch { /* fall through */ }
       }
 
       // Fallback: Workers AI LLaVA (free, weaker on dense Arabic)

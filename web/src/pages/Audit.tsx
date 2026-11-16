@@ -14,6 +14,20 @@ export default function Audit() {
   const [msg, setMsg] = useState('')
   const [report, setReport] = useState('')
   const [forensics, setForensics] = useState<{ score: number; heat: string | null } | null>(null)
+  const [ocrText, setOcrText] = useState('')
+  const [ocrBusy, setOcrBusy] = useState(false)
+
+  // Tesseract.js Arabic+English OCR, lazy-loaded, runs fully in browser
+  async function runOCR(f: File) {
+    setOcrBusy(true)
+    try {
+      const { createWorker } = await import('tesseract.js')
+      const worker = await createWorker(['ara', 'eng'])
+      const { data } = await worker.recognize(f)
+      await worker.terminate()
+      setOcrText(data.text.trim())
+    } catch { setOcrText('') } finally { setOcrBusy(false) }
+  }
 
   // ELA (Error Level Analysis) — open-source photo-forensics technique
   // Re-save at JPEG q0.9, diff vs original, amplify: edited regions glow.
@@ -52,7 +66,9 @@ export default function Audit() {
     setPreview(URL.createObjectURL(f))
     setState('idle')
     setForensics(null)
+    setOcrText('')
     if (f.type === 'image/jpeg' || f.type === 'image/png') runELA(f)
+    if (f.type.startsWith('image/')) runOCR(f)
   }
 
   async function submit() {
@@ -71,7 +87,7 @@ export default function Audit() {
         createdAt: serverTimestamp(),
       })
       try {
-        const analysis = await analyzeContract(key)
+        const analysis = await analyzeContract(key, ocrText || undefined)
         setReport(analysis)
         await updateDoc(doc(db, 'audits', ref.id), { aiReport: analysis, status: 'done', analyzedAt: serverTimestamp() })
         setState('done')
@@ -110,6 +126,14 @@ export default function Audit() {
               )}
               <input type="file" accept="image/*,application/pdf" onChange={onPick} className="mt-4 block w-full text-sm" />
             </div>
+
+            {ocrBusy && <p className="text-center text-sm text-ink/50">OCR চলছে (عربي + English)…</p>}
+            {ocrText && (
+              <details className="rounded-2xl border border-line bg-white p-5">
+                <summary className="cursor-pointer font-bold text-ink">OCR টেক্সট (কাঁচা)</summary>
+                <pre className="mt-3 max-h-48 overflow-auto whitespace-pre-wrap text-xs text-ink/70" dir="auto">{ocrText}</pre>
+              </details>
+            )}
 
             {forensics && (
               <div className="rounded-2xl border border-line bg-white p-5">

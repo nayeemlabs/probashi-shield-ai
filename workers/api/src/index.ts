@@ -161,12 +161,13 @@ export default {
     if (req.method === 'POST' && url.pathname === '/api/analyze') {
       const user = auth ? await verifyFirebaseToken(auth, env) : null
       if (!user) return json({ error: 'unauthorized' }, 401)
-      const { key } = (await req.json()) as { key?: string }
+      const { key, ocrText } = (await req.json()) as { key?: string; ocrText?: string }
       if (!key || !key.startsWith(`contracts/${user.uid}/`)) return json({ error: 'forbidden' }, 403)
       const obj = await env.CONTRACTS.get(key)
       if (!obj) return json({ error: 'not found' }, 404)
       const buf = await obj.arrayBuffer()
-      const prompt = 'This is an employment contract or visa document, possibly in Arabic. Extract and report in Bengali (Bangla): 1) job title/profession, 2) monthly salary and currency, 3) contract duration, 4) employer/kafil name if visible, 5) any suspicious or unusual clauses, 6) overall risk assessment (LOW/MEDIUM/HIGH) with one-line reason. Be concise.'
+      const ocrHint = ocrText ? `OCR-extracted text from the document (Arabic/English, may contain errors): """${ocrText.slice(0, 3000)}""". Use it to verify and enrich your analysis.` : ''
+      const prompt = `This is an employment contract or visa document, possibly in Arabic. ${ocrHint} Extract and report in Bengali (Bangla): 1) job title/profession, 2) monthly salary and currency, 3) contract duration, 4) employer/kafil name if visible, 5) any suspicious or unusual clauses, 6) overall risk assessment (LOW/MEDIUM/HIGH) with one-line reason. Be concise.`
       const out = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', {
         image: [...new Uint8Array(buf)],
         prompt,

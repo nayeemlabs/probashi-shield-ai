@@ -2,8 +2,8 @@ import { useState, type ChangeEvent } from 'react'
 import { Nav } from '../components/Nav'
 import { useAuth } from '../lib/auth'
 import { db } from '../lib/firebase'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { uploadContract, fileUrl } from '../lib/api'
+import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore'
+import { uploadContract, fileUrl, analyzeContract } from '../lib/api'
 
 export default function Audit() {
   const { user } = useAuth()
@@ -12,6 +12,7 @@ export default function Audit() {
   const [promise, setPromise] = useState('')
   const [state, setState] = useState<'idle' | 'uploading' | 'done' | 'error'>('idle')
   const [msg, setMsg] = useState('')
+  const [report, setReport] = useState('')
 
   function onPick(e: ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0]
@@ -27,16 +28,25 @@ export default function Audit() {
     setMsg('')
     try {
       const { key } = await uploadContract(file)
-      await addDoc(collection(db, 'audits'), {
+      const ref = await addDoc(collection(db, 'audits'), {
         ownerId: user.uid,
         imageKey: key,
         imageUrl: fileUrl(key),
         brokerPromise: promise,
-        status: 'queued',
+        status: 'analyzing',
         createdAt: serverTimestamp(),
       })
-      setState('done')
-      setMsg('চুক্তিটি গৃহীত হয়েছে, AI অডিট চলছে, ফলাফল শীঘ্রই এখানে পাবেন।')
+      try {
+        const analysis = await analyzeContract(key)
+        setReport(analysis)
+        await updateDoc(doc(db, 'audits', ref.id), { aiReport: analysis, status: 'done', analyzedAt: serverTimestamp() })
+        setState('done')
+        setMsg('অডিট সম্পন্ন! নিচে AI রিপোর্ট দেখুন।')
+      } catch {
+        await updateDoc(doc(db, 'audits', ref.id), { status: 'queued', note: 'AI analysis pending' })
+        setState('done')
+        setMsg('চুক্তি আপলোড হয়েছে। AI বিশ্লেষণ একটু পরে চলবে, result শীঘ্রই পাবেন।')
+      }
     } catch {
       setState('error')
       setMsg('আপলোড ব্যর্থ হয়েছে। আবার চেষ্টা করুন।')
@@ -87,6 +97,13 @@ export default function Audit() {
             {msg && (
               <div className={`rounded-xl p-4 text-center font-medium ${state === 'done' ? 'bg-safe/10 text-safe' : 'bg-danger/10 text-danger'}`}>
                 {msg}
+              </div>
+            )}
+
+            {report && (
+              <div className="rounded-2xl border border-brand/30 bg-brand/5 p-6">
+                <h3 className="mb-2 font-bold text-brand">AI অডিট রিপোর্ট</h3>
+                <div className="whitespace-pre-wrap text-sm leading-relaxed text-ink/85">{report}</div>
               </div>
             )}
 

@@ -44,3 +44,17 @@ export async function getAdminStats(): Promise<AdminStats> {
   if (!res.ok) throw new Error(`forbidden (${res.status})`)
   return res.json()
 }
+
+export async function analyzeContract(key: string): Promise<string> {
+  const user = auth.currentUser
+  if (!user) throw new Error('not-authenticated')
+  const token = await user.getIdToken()
+  const res = await fetch(`${API_URL}/api/analyze`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ key }),
+  })
+  if (!res.ok) throw new Error(`analysis failed (${res.status})`)
+  const data = await res.json()
+  return data.analysis as string
+}

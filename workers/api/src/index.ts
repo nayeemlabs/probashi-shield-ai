@@ -8,6 +8,7 @@ interface Env {
   CONTRACTS: R2Bucket
   FIREBASE_PROJECT_ID: string
   ADMIN_EMAILS: string
+  AI: any
 }
 
 interface FirebaseUser {
@@ -154,6 +155,24 @@ export default {
           'access-control-allow-origin': '*',
         },
       })
+    }
+
+    // POST /api/analyze, run Workers AI vision on an owned contract image
+    if (req.method === 'POST' && url.pathname === '/api/analyze') {
+      const user = auth ? await verifyFirebaseToken(auth, env) : null
+      if (!user) return json({ error: 'unauthorized' }, 401)
+      const { key } = (await req.json()) as { key?: string }
+      if (!key || !key.startsWith(`contracts/${user.uid}/`)) return json({ error: 'forbidden' }, 403)
+      const obj = await env.CONTRACTS.get(key)
+      if (!obj) return json({ error: 'not found' }, 404)
+      const buf = await obj.arrayBuffer()
+      const prompt = 'This is an employment contract or visa document, possibly in Arabic. Extract and report in Bengali (Bangla): 1) job title/profession, 2) monthly salary and currency, 3) contract duration, 4) employer/kafil name if visible, 5) any suspicious or unusual clauses, 6) overall risk assessment (LOW/MEDIUM/HIGH) with one-line reason. Be concise.'
+      const out = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', {
+        image: [...new Uint8Array(buf)],
+        prompt,
+        max_tokens: 700,
+      })
+      return json({ analysis: (out as any)?.description ?? JSON.stringify(out) })
     }
 
     // GET /api/admin/stats, admin only

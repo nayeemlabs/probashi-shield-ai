@@ -9,6 +9,14 @@ interface Env {
   FIREBASE_PROJECT_ID: string
   ADMIN_EMAILS: string
   AI: any
+  GEMINI_API_KEY?: string
+}
+
+function bytesToB64(buf: ArrayBuffer): string {
+  const bytes = new Uint8Array(buf)
+  let s = ''
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
+  return btoa(s)
 }
 
 interface FirebaseUser {
@@ -166,14 +174,37 @@ export default {
       const obj = await env.CONTRACTS.get(key)
       if (!obj) return json({ error: 'not found' }, 404)
       const buf = await obj.arrayBuffer()
+      const mime = obj.httpMetadata?.contentType ?? 'image/jpeg'
       const ocrHint = ocrText ? `OCR-extracted text from the document (Arabic/English, may contain errors): """${ocrText.slice(0, 3000)}""". Use it to verify and enrich your analysis.` : ''
       const prompt = `This is an employment contract or visa document, possibly in Arabic. ${ocrHint} Extract and report in Bengali (Bangla): 1) job title/profession, 2) monthly salary and currency, 3) contract duration, 4) employer/kafil name if visible, 5) any suspicious or unusual clauses, 6) overall risk assessment (LOW/MEDIUM/HIGH) with one-line reason. Be concise.`
+
+      // Primary: Gemini 2.5 Flash (best Arabic document understanding)
+      if (env.GEMINI_API_KEY) {
+        try {
+          const g = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [
+                { text: prompt },
+                { inline_data: { mime_type: mime, data: bytesToB64(buf) } },
+              ] }],
+              generationConfig: { maxOutputTokens: 1200 },
+            }),
+          })
+          const gj = (await g.json()) as any
+          const text = gj?.candidates?.[0]?.content?.parts?.[0]?.text
+          if (text) return json({ analysis: text, engine: 'gemini-2.5-flash' })
+        } catch { /* fall through to LLaVA */ }
+      }
+
+      // Fallback: Workers AI LLaVA (free, weaker on dense Arabic)
       const out = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', {
         image: [...new Uint8Array(buf)],
         prompt,
         max_tokens: 700,
       })
-      return json({ analysis: (out as any)?.description ?? JSON.stringify(out) })
+      return json({ analysis: (out as any)?.description ?? JSON.stringify(out), engine: 'llava' })
     }
 
     // GET /api/admin/stats, admin only

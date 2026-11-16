@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Chat Evidence - Broker Deception (Hasan Dalal vs Shafiqul Islam)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0f172a;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px 12px;
+    }
+
+    .bn {
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+
+    .phone-mockup {
+      width: 440px;
+      max-width: 100%;
+      background: #0b141a;
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 0 10px #1e293b;
+      display: flex;
+      flex-direction: column;
+      height: 860px;
+      position: relative;
+    }
+
+    /* Top Phone Notch */
+    .phone-notch {
+      height: 28px;
+      background: #111b21;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      font-size: 11px;
+      color: #aebac1;
+      font-weight: 600;
+      border-top-left-radius: 36px;
+      border-top-right-radius: 36px;
+    }
+
+    /* WhatsApp Header */
+    .chat-header {
+      background: #202c33;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #e9edef;
+      border-bottom: 1px solid #2a3942;
+    }
+
+    .back-btn {
+      color: #aebac1;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .avatar-wrap {
+      position: relative;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #8b5cf6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .avatar-status-dot {
+      width: 11px;
+      height: 11px;
+      background: #22c55e;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border: 2px solid #202c33;
+    }
+
+    .contact-info {
+      flex: 1;
+    }
+
+    .contact-name {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #e9edef;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .contact-status {
+      font-size: 11.5px;
+      color: #8696a0;
+    }
+
+    .header-icons {
+      display: flex;
+      gap: 16px;
+      color: #aebac1;
+      font-size: 17px;
+    }
+
+    /* Chat Body */
+    .chat-body {
+      flex: 1;
+      background-color: #0b141a;
+      background-image: radial-gradient(rgba(134, 150, 160, 0.08) 1px, transparent 0);
+      background-size: 18px 18px;
+      padding: 14px 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .encryption-notice {
+      background: #182229;
+      color: #ffd279;
+      font-size: 10px;
+      text-align: center;
+      padding: 6px 12px;
+      border-radius: 8px;
+      line-height: 1.35;
+      margin: 0 auto 6px auto;
+      max-width: 90%;
+      border: 1px solid #2a3942;
+    }
+
+    .date-badge {
+      background: #182229;
+      color: #8696a0;
+      font-size: 10.5px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      align-self: center;
+      margin-bottom: 4px;
+    }
+
+    /* Message Bubbles */
+    .msg-row {
+      display: flex;
+      flex-direction: column;
+      max-width: 82%;
+    }
+
+    .msg-incoming {
+      align-self: flex-start;
+    }
+
+    .msg-outgoing {
+      align-self: flex-end;
+    }
+
+    .bubble {
+      padding: 8px 11px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      position: relative;
+      word-wrap: break-word;
+    }
+
+    .bubble-incoming {
+      background: #202c33;
+      color: #e9edef;
+      border-top-left-radius: 0;
+    }
+
+    .bubble-outgoing {
+      background: #005c4b;
+      color: #e9edef;
+      border-top-right-radius: 0;
+    }
+
+    .msg-meta {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      font-size: 9.5px;
+      color: #8696a0;
+      margin-top: 3px;
+    }
+
+    .bubble-outgoing .msg-meta {
+      color: #aebac1;
+    }
+
+    .ticks {
+      color: #53bdeb;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    /* Voice Note Bubble */
+    .vn-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 2px;
+      width: 250px;
+    }
+
+    .vn-play {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #00a884;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111b21;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .vn-waveform {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 24px;
+    }
+
+    .vn-bar {
+      width: 3px;
+      background: #8696a0;
+      border-radius: 2px;
+    }
+
+    /* Forensic Audit Highlight Tag */
+    .fraud-tag {
+      display: inline-block;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-top: 4px;
+      margin-bottom: 2px;
+    }
+
+    /* Bottom Input Bar */
+    .chat-input-bar {
+      background: #202c33;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid #2a3942;
+    }
+
+    .input-box {
+      flex: 1;
+      background: #2a3942;
+      border-radius: 20px;
+      padding: 8px 14px;
+      font-size: 12px;
+      color: #8696a0;
+    }
+
+    .mic-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #00a884;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111b21;
+      font-size: 16px;
+    }
+
+    /* Evidence Sidebar / Banner */
+    .audit-banner {
+      position: absolute;
+      bottom: -60px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 11px;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .phone-mockup {
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+        height: auto;
+      }
+      .phone-notch, .chat-input-bar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-mockup">
+    <!-- Status Notch -->
+    <div class="phone-notch">
+      <span>11:42</span>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <span>5G</span>
+        <span>98%</span>
+      </div>
+    </div>
+
+    <!-- WhatsApp Header -->
+    <div class="chat-header">
+      <div class="back-btn">←</div>
+      <div class="avatar-wrap">
+        <div class="avatar">HD</div>
+        <div class="avatar-status-dot"></div>
+      </div>
+      <div class="contact-info">
+        <div class="contact-name">
+          <span>Hasan Dalal (Al-Hasan Travels)</span>
+        </div>
+        <div class="contact-status">online • +880 1712-984531</div>
+      </div>
+      <div class="header-icons">
+        <span>📹</span>
+        <span>📞</span>
+        <span>⋮</span>
+      </div>
+    </div>
+
+    <!-- Chat Messages -->
+    <div class="chat-body">
+      <!-- Encryption Banner -->
+      <div class="encryption-notice">
+        🔒 Messages to this chat and calls are secured with end-to-end encryption. Tap for info.
+      </div>
+
+      <div class="date-badge">Thursday, 8 January 2026</div>
+
+      <!-- Incoming Voice Note -->
+      <div class="msg-row msg-incoming">
+        <div class="bubble bubble-incoming">
+          <div class="vn-container">
+            <div class="vn-play">▶</div>
+            <div class="vn-waveform">
+              <div class="vn-bar" style="height: 10px;"></div>
+              <div class="vn-bar" style="height: 16px;"></div>
+              <div class="vn-bar" style="height: 22px;"></div>
+              <div class="vn-bar" style="height: 14px;"></div>
+              <div class="vn-bar" style="height: 18px;"></div>
+              <div class="vn-bar" style="height: 8px;"></div>
+              <div class="vn-bar" style="height: 20px;"></div>
+              <div class="vn-bar" style="height: 12px;"></div>
+              <div class="vn-bar" style="height: 24px;"></div>
+              <div class="vn-bar" style="height: 14px;"></div>
+              <div class="vn-bar" style="height: 18px;"></div>
+              <div class="vn-bar" style="height: 10px;"></div>
+            </div>
+            <span style="font-size: 10px; color: #8696a0;">0:42</span>
+          </div>
+          <div style="font-size: 10.5px; color: #94a3b8; font-style: italic; border-top: 1px solid #2a3942; padding-top: 4px; margin-top: 4px;" class="bn">
+            🎤 <em>"শফিক ভাই, খবর ভালো। রিয়াদে বড় শেখের প্রাইভেট ড্রাইভার (Driver) ভিসা চূড়ান্ত হইয়া গেছে। বেতন ২৫০০ রিয়াল। কোনো চিন্তা করবেন না..."</em>
+          </div>
+          <div class="msg-meta">10:14 AM</div>
+        </div>
+      </div>
+
+      <!-- Broker Explicit Text Promise -->
+      <div class="msg-row msg-incoming">
+        <div class="bubble bubble-incoming bn">
+          <div>
+            শফিক ভাই, মুবারকবাদ! আপনার সৌদি আরবের রিয়াদ ভিআইপি <strong>প্রাইভেট ড্রাইভার (Private Driver)</strong> ভিসা কনফার্ম হইয়া গেছে। 
+            <br><br>
+            মাসিক বেতন <strong>২৫০০ রিয়াল (SAR 2,500)</strong>। থাকা ও খাওয়া সম্পূর্ণ কোম্পানি ফ্রি দিব। বড় শেখের নতুন গাড়ি চালাবেন।
+          </div>
+          <div class="fraud-tag">⚠️ VERBAL PROMISE: DRIVER / SAR 2,500</div>
+          <div class="msg-meta">10:15 AM</div>
+        </div>
+      </div>
+
+      <!-- Worker Query -->
+      <div class="msg-row msg-outgoing">
+        <div class="bubble bubble-outgoing bn">
+          <div>
+            হাসান ভাই, শুকরিয়া। আমার তো কুমিল্লার ড্রাইভিং লাইসেন্স আছে। কিন্তু ভিসা আর এগ্রিমেন্ট পেপারে কি ড্রাইভার লেখা থাকবে তো? মোট কত খরচ হবে ভাই?
+          </div>
+          <div class="msg-meta">10:18 AM <span class="ticks">✓✓</span></div>
+        </div>
+      </div>
+
+      <!-- Broker Predatory Response -->
+      <div class="msg-row msg-incoming">
+        <div class="bubble bubble-incoming bn">
+          <div>
+            হাঁ ১০০% ড্রাইভার। মোট প্যাকেজ <strong>৩,৫০,০০০ টাকা (সাড়ে তিন লাখ টাকা)</strong>। 
+            <br><br>
+            আগামীকাল সকালে ব্যাংকে <strong>১,৫০,০০০ টাকা</strong> অগ্রিম পাঠাবেন। বাকি ২ লাখ টাকা ভিসা হাতে পাওয়ার পর।
+          </div>
+          <div class="fraud-tag">⚠️ EXTORTIONATE FEE: BDT 3,50,000</div>
+          <div class="msg-meta">10:20 AM</div>
+        </div>
+      </div>
+
+      <!-- Worker Hesitation about Arabic Contract Clause -->
+      <div class="msg-row msg-outgoing">
+        <div class="bubble bubble-outgoing bn">
+          <div>
+            হাসান ভাই, আমার এক আত্মীয় বলল সৌদি যাওয়ার পেপারে নাকি অনেক সময় 'ক্লিনার' (Cleaner/Amel) লিখে দেয়, পরে গেলে নাকি গাড়ি দেয় না, ঝাড়ুদারের কাজ করায়। পেপারে আরবিতে কি লেখা থাকবে?
+          </div>
+          <div class="msg-meta">10:24 AM <span class="ticks">✓✓</span></div>
+        </div>
+      </div>
+
+      <!-- Broker Deception & Pressure -->
+      <div class="msg-row msg-incoming">
+        <div class="bubble bubble-incoming bn">
+          <div>
+            আরে ভাই মূর্খের কথায় কান দেন কেন! ওটা আরবি সরকারি পেপারে কোম্পানি ট্যাক্স কম দেওয়ার জন্য ফরমালিটি হিসেবে عامل (শ্রমিক/ক্লিনার) লিখে রাখে। 
+            <br><br>
+            <strong>রিয়াদ বিমানবন্দরে নামলেই কোম্পানি আপনাকে গাড়ির চাবি হাতে দিয়ে দিবে।</strong> আমি ৫০ জনরে এইভাবে পাঠাইছি, সবাই গাড়ি চালাইতাছে! আপনি খালি পেপারে দস্তখত দিয়া দেন।
+          </div>
+          <div class="fraud-tag">🚨 PREDATORY FRAUD: MISREPRESENTING CLEANER VISA AS FORMALITY</div>
+          <div class="msg-meta">10:28 AM</div>
+        </div>
+      </div>
+
+      <!-- Broker Urgent Deadline Threat -->
+      <div class="msg-row msg-incoming">
+        <div class="bubble bubble-incoming bn">
+          <div>
+            কাল দুপুর ১২টার মধ্যে দেড় লাখ টাকা না দিলে এই ভিআইপি ভিসা অন্য ক্যান্ডিডেটরে দিয়া দিব। ফ্লাইট কিন্তু আগামী রবিবার!
+          </div>
+          <div class="msg-meta">10:30 AM</div>
+        </div>
+      </div>
+
+      <!-- Worker Capitulation -->
+      <div class="msg-row msg-outgoing">
+        <div class="bubble bubble-outgoing bn">
+          <div>
+            আচ্ছা ভাই, ধার-দেনা কইরা টাকা রেডি করতেছি। আল্লাহ ভরসা।
+          </div>
+          <div class="msg-meta">10:35 AM <span class="ticks">✓✓</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Chat Input Area -->
+    <div class="chat-input-bar">
+      <div style="font-size: 18px; color: #8696a0;">😊</div>
+      <div style="font-size: 18px; color: #8696a0;">📎</div>
+      <div class="input-box">Type a message...</div>
+      <div class="mic-btn">🎙️</div>
+    </div>
+  </div>
+
+</body>
+</html>

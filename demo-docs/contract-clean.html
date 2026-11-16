@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KSA Labor Contract - Clean Control Case (KSA-WPS-2026-1184920)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;800&family=Courier+Prime:wght@400;700&family=Inter:wght@400;500;600;700&family=Libre+Barcode+128+Text&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --saudi-green: #006C35;
+      --saudi-gold: #C5A059;
+      --border-color: #2b3a4a;
+      --stamp-blue: #1e40af;
+      --stamp-green: #047857;
+      --bg-cream: #fafbf9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #525659;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+      color: #111827;
+      display: flex;
+      justify-content: center;
+      padding: 24px 0;
+      line-height: 1.45;
+    }
+
+    .page {
+      background: var(--bg-cream);
+      width: 210mm;
+      min-height: 297mm;
+      padding: 14mm 16mm 16mm 16mm;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      position: relative;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(245, 250, 246, 0.95), rgba(251, 253, 251, 0.98)),
+        repeating-linear-gradient(45deg, rgba(0, 108, 53, 0.015) 0px, rgba(0, 108, 53, 0.015) 2px, transparent 2px, transparent 14px);
+    }
+
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+      }
+      .page {
+        box-shadow: none;
+        width: 100%;
+        min-height: 100%;
+        padding: 10mm 12mm;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Security border */
+    .outer-border {
+      border: 2px solid var(--saudi-green);
+      padding: 3px;
+      height: 100%;
+    }
+
+    .inner-border {
+      border: 1px dashed var(--saudi-gold);
+      padding: 10px 14px;
+      height: 100%;
+      position: relative;
+    }
+
+    /* Watermark */
+    .watermark {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 78px;
+      font-weight: 800;
+      color: rgba(0, 108, 53, 0.04);
+      pointer-events: none;
+      white-space: nowrap;
+      text-transform: uppercase;
+      font-family: 'Amiri', serif;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--saudi-green);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-center {
+      text-align: center;
+      flex: 1;
+      padding: 0 10px;
+    }
+
+    .header-title-ar {
+      font-family: 'Amiri', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--saudi-green);
+      line-height: 1.25;
+    }
+
+    .header-title-en {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: #374151;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      direction: ltr;
+    }
+
+    .header-sub-ar {
+      font-size: 11px;
+      color: #4b5563;
+      margin-top: 2px;
+    }
+
+    .header-sub-en {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      color: #6b7280;
+      direction: ltr;
+    }
+
+    .qr-box {
+      text-align: center;
+      direction: ltr;
+    }
+
+    .qr-svg {
+      width: 60px;
+      height: 60px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .barcode-text {
+      font-family: 'Libre Barcode 128 Text', cursive;
+      font-size: 26px;
+      line-height: 1;
+      color: #111827;
+      letter-spacing: 2px;
+      direction: ltr;
+      display: block;
+      text-align: center;
+    }
+
+    .meta-bar {
+      display: flex;
+      justify-content: space-between;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 6px 10px;
+      font-size: 10.5px;
+      margin-bottom: 12px;
+      border-radius: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .meta-item {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .meta-label {
+      font-weight: 700;
+      color: var(--saudi-green);
+    }
+
+    .meta-val {
+      font-family: 'Courier Prime', monospace;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    /* Parties Section */
+    .section-title {
+      background: var(--saudi-green);
+      color: #ffffff;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      border-radius: 2px;
+    }
+
+    .parties-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .party-card {
+      border: 1px solid #cbd5e1;
+      background: rgba(255,255,255,0.85);
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+    }
+
+    .party-name {
+      font-weight: 700;
+      font-size: 11.5px;
+      color: var(--saudi-green);
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-bottom: 5px;
+    }
+
+    .field-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+
+    .field-lbl {
+      color: #4b5563;
+    }
+
+    .field-val {
+      font-weight: 600;
+      color: #111827;
+      direction: ltr;
+      text-align: right;
+    }
+
+    /* Core Compensation Table */
+    .compensation-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .compensation-table th, .compensation-table td {
+      border: 1px solid #cbd5e1;
+      padding: 5px 8px;
+      text-align: right;
+    }
+
+    .compensation-table th {
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 700;
+      font-size: 10px;
+    }
+
+    .compensation-table .en-sub {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5px;
+      color: #64748b;
+      direction: ltr;
+      text-align: right;
+      font-weight: 400;
+    }
+
+    .clean-pill {
+      background: #dcfce7;
+      color: #166534;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 3px;
+      border: 1px solid #86efac;
+      display: inline-block;
+    }
+
+    /* Clauses Two Column */
+    .clauses-container {
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .clauses-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+    }
+
+    .clauses-table th {
+      background: #e2e8f0;
+      color: #1e293b;
+      padding: 4px 6px;
+      font-weight: 700;
+      font-size: 9.5px;
+    }
+
+    .clauses-table td {
+      border: 1px solid #e2e8f0;
+      padding: 4px 6px;
+      vertical-align: top;
+      line-height: 1.35;
+    }
+
+    .clause-num {
+      font-weight: 700;
+      color: var(--saudi-green);
+      width: 32px;
+      text-align: center;
+      background: #f8fafc;
+    }
+
+    .clause-ar {
+      width: 50%;
+      text-align: right;
+      direction: rtl;
+    }
+
+    .clause-en {
+      width: 45%;
+      text-align: left;
+      direction: ltr;
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5px;
+      color: #334155;
+    }
+
+    /* Agency Section */
+    .agency-clean-box {
+      border: 1.5px solid #059669;
+      background: #ecfdf5;
+      border-radius: 4px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      font-size: 9px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .agency-title {
+      font-weight: 700;
+      color: #065f46;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .fee-badge-clean {
+      background: #059669;
+      color: #ffffff;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 10px;
+      text-align: center;
+      direction: ltr;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Signatures & Stamps Footer */
+    .footer-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 6px;
+      align-items: end;
+      position: relative;
+      z-index: 2;
+    }
+
+    .sign-block {
+      border: 1px solid #cbd5e1;
+      background: rgba(255,255,255,0.85);
+      padding: 6px;
+      border-radius: 4px;
+      min-height: 80px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sign-title {
+      font-size: 9px;
+      font-weight: 700;
+      color: #475569;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 2px;
+    }
+
+    .sign-content {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .sign-script {
+      font-family: 'Amiri', cursive;
+      font-size: 22px;
+      color: #0f172a;
+      transform: rotate(-2deg);
+      user-select: none;
+    }
+
+    .worker-thumb {
+      width: 38px;
+      height: 48px;
+      border-radius: 45%;
+      border: 1px solid #166534;
+      background: radial-gradient(circle, rgba(22, 101, 52, 0.35) 10%, rgba(22, 101, 52, 0.12) 60%, transparent 80%);
+      opacity: 0.9;
+      display: inline-block;
+      margin-right: 8px;
+      transform: rotate(5deg);
+    }
+
+    /* Realistic Rubber Stamps */
+    .stamp-ksa {
+      position: absolute;
+      bottom: 10px;
+      right: 25px;
+      width: 88px;
+      height: 88px;
+      border: 2.5px solid var(--stamp-blue);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--stamp-blue);
+      font-size: 7px;
+      font-weight: 700;
+      transform: rotate(-8deg);
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .stamp-ksa-inner {
+      width: 72px;
+      height: 72px;
+      border: 1px dashed var(--stamp-blue);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+    }
+
+    .stamp-kafil-clean {
+      position: absolute;
+      bottom: 12px;
+      left: 20px;
+      width: 95px;
+      height: 60px;
+      border: 2px solid var(--stamp-green);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--stamp-green);
+      font-size: 7.5px;
+      font-weight: 800;
+      transform: rotate(4deg);
+      opacity: 0.88;
+      pointer-events: none;
+    }
+
+    .attached-visa-card-clean {
+      border: 1.5px solid #059669;
+      background: #f0fdf4;
+      border-radius: 4px;
+      padding: 6px;
+      font-size: 8px;
+    }
+
+    .visa-header {
+      display: flex;
+      justify-content: space-between;
+      color: #065f46;
+      font-weight: 700;
+      border-bottom: 1px solid #bbf7d0;
+      padding-bottom: 2px;
+      margin-bottom: 4px;
+    }
+
+    .visa-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+    }
+
+    /* Control panel for demo viewer */
+    .demo-bar {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: #1e293b;
+      color: #ffffff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .demo-btn {
+      background: #059669;
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 11px;
+    }
+    .demo-btn:hover { background: #047857; }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Demo Helper (Not printed) -->
+  <div class="demo-bar no-print">
+    <div style="font-weight: 700; color: #4ade80;">✅ DEMO CASE 2: CLEAN CONTROL CONTRACT</div>
+    <div style="font-size: 10px; color: #94a3b8;">Driver profession (SAR 2,200 + 300 allowance), 100% compliant</div>
+    <div style="display: flex; gap: 6px; margin-top: 4px;">
+      <button class="demo-btn" onclick="window.print()">🖨️ Print to PDF (A4)</button>
+      <a href="GROUND_TRUTH.md" class="demo-btn" style="background: #334155; text-decoration: none; text-align: center;">Ground Truth</a>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="outer-border">
+      <div class="inner-border">
+        <div class="watermark">QIWA / توثيق إلكتروني</div>
+
+        <!-- HEADER -->
+        <div class="header">
+          <div class="header-logo">
+            <!-- KSA Emblem SVG -->
+            <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="48" fill="#F4FAF6" stroke="#006C35" stroke-width="2"/>
+              <!-- Palm Tree -->
+              <path d="M50 20 C48 30 46 38 46 48 L54 48 C54 38 52 30 50 20 Z" fill="#006C35"/>
+              <path d="M50 25 C40 18 30 22 25 28 C35 30 42 32 48 35" stroke="#006C35" stroke-width="2" fill="none"/>
+              <path d="M50 25 C60 18 70 22 75 28 C65 30 58 32 52 35" stroke="#006C35" stroke-width="2" fill="none"/>
+              <path d="M50 32 C38 28 26 34 22 42 C32 42 42 41 48 43" stroke="#006C35" stroke-width="2" fill="none"/>
+              <path d="M50 32 C62 28 74 34 78 42 C68 42 58 41 52 43" stroke="#006C35" stroke-width="2" fill="none"/>
+              <!-- Crossed Swords -->
+              <path d="M30 68 L70 52 M32 65 L28 72 L35 70" stroke="#006C35" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M70 68 L30 52 M68 65 L72 72 L65 70" stroke="#006C35" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <div style="font-size: 8px; font-weight: 700; color: #006C35; font-family: 'Inter', sans-serif;">KINGDOM OF SAUDI ARABIA</div>
+              <div style="font-size: 8px; font-weight: 700; color: #475569; font-family: 'Inter', sans-serif;">MINISTRY OF HUMAN RESOURCES</div>
+            </div>
+          </div>
+
+          <div class="header-center">
+            <div class="header-title-ar">المملكة العربية السعودية — وزارة الموارد البشرية والتنمية الاجتماعية</div>
+            <div class="header-title-en">Standard Employment Contract (WPS Registered) — Qiwa Platform</div>
+            <div class="header-sub-ar">عقد عمل موحد للعمالة المهنية — مسجل بنظام حماية الأجور الإلكتروني المعتمد</div>
+            <div class="header-sub-en">Verified Standard Employment Contract (Zero Discrepancy Control Case)</div>
+          </div>
+
+          <div class="qr-box">
+            <!-- Simulated QR Code SVG -->
+            <svg class="qr-svg" viewBox="0 0 100 100" fill="#111827">
+              <rect width="100" height="100" fill="#ffffff" stroke="#cbd5e1"/>
+              <!-- Top Left Marker -->
+              <rect x="10" y="10" width="24" height="24" fill="#006C35"/>
+              <rect x="15" y="15" width="14" height="14" fill="#ffffff"/>
+              <rect x="19" y="19" width="6" height="6" fill="#006C35"/>
+              <!-- Top Right Marker -->
+              <rect x="66" y="10" width="24" height="24" fill="#006C35"/>
+              <rect x="71" y="15" width="14" height="14" fill="#ffffff"/>
+              <rect x="75" y="19" width="6" height="6" fill="#006C35"/>
+              <!-- Bottom Left Marker -->
+              <rect x="10" y="66" width="24" height="24" fill="#006C35"/>
+              <rect x="15" y="71" width="14" height="14" fill="#ffffff"/>
+              <rect x="19" y="75" width="6" height="6" fill="#006C35"/>
+              <!-- Clean Data Pattern -->
+              <rect x="42" y="14" width="8" height="8"/>
+              <rect x="54" y="14" width="6" height="6"/>
+              <rect x="42" y="26" width="6" height="12"/>
+              <rect x="52" y="24" width="8" height="8"/>
+              <rect x="14" y="42" width="12" height="6"/>
+              <rect x="32" y="42" width="6" height="8"/>
+              <rect x="44" y="42" width="12" height="6"/>
+              <rect x="62" y="42" width="8" height="12"/>
+              <rect x="76" y="42" width="14" height="6"/>
+              <rect x="42" y="56" width="10" height="8"/>
+              <rect x="56" y="54" width="6" height="14"/>
+              <rect x="68" y="56" width="14" height="6"/>
+              <rect x="42" y="76" width="14" height="8"/>
+              <rect x="62" y="74" width="8" height="16"/>
+              <rect x="76" y="76" width="12" height="8"/>
+            </svg>
+            <div style="font-size: 7.5px; font-weight: 700; color: #059669; margin-top: 2px;">QIWA VERIFIED ★</div>
+          </div>
+        </div>
+
+        <!-- METADATA BAR -->
+        <div class="meta-bar">
+          <div class="meta-item">
+            <span class="meta-label">رقم العقد الموحد (Contract ID):</span>
+            <span class="meta-val">KSA-WPS-2026-1184920</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">تاريخ التوثيق (Date):</span>
+            <span class="meta-val">15/01/2026 (26 Rajab 1447H)</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">الرقم الموحد للمنشأة (Unified Org No):</span>
+            <span class="meta-val">7003498210</span>
+          </div>
+        </div>
+
+        <!-- PARTIES SECTION -->
+        <div class="section-title">
+          <span>بيانات أطراف العقد (Contracting Parties)</span>
+          <span style="font-family: 'Inter', sans-serif; font-size: 9.5px; direction: ltr;">Employer & Employee Information</span>
+        </div>
+
+        <div class="parties-grid">
+          <!-- First Party: Employer -->
+          <div class="party-card">
+            <div class="party-name">الطرف الأول: صاحب العمل (First Party: Employer / Kafil)</div>
+            <div class="field-row">
+              <span class="field-lbl">اسم الشركة (Entity):</span>
+              <span class="field-val" style="direction: rtl; font-size: 9.5px;">شركة المدينة للخدمات اللوجستية والنقل</span>
+            </div>
+            <div class="field-row">
+              <span class="field-lbl">Entity English:</span>
+              <span class="field-val">Al-Madinah Logistics & Transport Co.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-lbl">السجل التجاري (CR):</span>
+              <span class="field-val">1010349821</span>
+            </div>
+            <div class="field-row">
+              <span class="field-lbl">الممثل النظامي (Sponsor Rep):</span>
+              <span class="field-val" style="direction: rtl;">سلطان فهد القحطاني</span>
+            </div>
+            <div class="field-row">
+              <span class="field-lbl">العنوان / المدينة (City):</span>
+              <span class="field-val">Jeddah, Logistics Hub, KSA</span>
+            </div>
+          </div>
+
+          <!-- Second Party: Worker -->
+          <div class="party-card">
+            <div class="party-name">الطرف الثاني: العامل (Second Party: Employee / Migrant)</div>
+            <div class="field-row">
+              <span class="field-lbl">اسم العامل (Full Name):</span>
+              <span class="field-val">SHAFIQUL ISLAM (শফিকুল ইসলাম)</span>
+            </div>
+            <div class="field-row">
+              <span class="field-lbl">الاسم بالعربية:</span>
+              <span class="field-val" style="direction: rtl;">شفيق الإسلام رفيق الإسلام</span>
+            </div>
+            <div class="field-row">
+              <span class="field-lbl">الجنسية (Nationality):</span>
+              <span class="field-val">Bangladeshi (بنغلاديشي)</span>
+            </div>
+            <div class="field-row">
+              <span class="field-lbl">رقم الجواز (Passport No):</span>
+              <span class="field-val" style="color: #047857; font-weight: 700;">EG0849216</span>
+            </div>
+            <div class="field-row">
+              <span class="field-lbl">الرقم القومي (NID / Personal ID):</span>
+              <span class="field-val">19932694582001429</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CORE COMPENSATION SECTION -->
+        <div class="section-title">
+          <span>المهنة والراتب والبدلات (Occupation, Wage & Allowances)</span>
+          <span style="font-family: 'Inter', sans-serif; font-size: 9.5px; direction: ltr;">Standard Labor Terms</span>
+        </div>
+
+        <table class="compensation-table">
+          <thead>
+            <tr>
+              <th style="width: 38%;">البند التعاقدي (Contract Term)</th>
+              <th style="width: 32%;">المدرج بالعقد الرسمي (Document Value)</th>
+              <th style="width: 30%;">ملاحظات وتفاصيل (Notes / English)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- CLEAN PROFESSION -->
+            <tr>
+              <td>
+                <strong>المسمى المهني المعتمد</strong>
+                <span class="en-sub">Designated Profession / Occupational Title</span>
+              </td>
+              <td>
+                <span class="clean-pill">
+                  سائق نقل تجاري / سائق (Driver)
+                </span>
+              </td>
+              <td>
+                <span style="font-size: 8.5px; color: #166534; font-family: 'Inter', sans-serif; font-weight: 600;">
+                  Code: 833202 (Commercial Vehicle Driver). <br>
+                  Matches verbal commitment 100%.
+                </span>
+              </td>
+            </tr>
+
+            <!-- CLEAN SALARY -->
+            <tr>
+              <td>
+                <strong>الراتب الأساسي الشهري</strong>
+                <span class="en-sub">Basic Monthly Wage (WPS Direct Deposit)</span>
+              </td>
+              <td>
+                <span style="font-family: 'Courier Prime', monospace; font-weight: 700; font-size: 11.5px; color: #166534;">
+                  2,200.00 ر.س (SAR 2,200)
+                </span>
+              </td>
+              <td>
+                <span style="font-size: 8.5px; color: #334155; font-family: 'Inter', sans-serif;">
+                  Two Thousand Two Hundred Saudi Riyals Only.
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>بدل الإعاشة والطعام</strong>
+                <span class="en-sub">Food Allowance (Paid Separately)</span>
+              </td>
+              <td><strong>300.00 ر.س (SAR 300)</strong> شهرياً</td>
+              <td><span class="en-sub">Total monthly gross package: SAR 2,500</span></td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>مدة العقد وفترة التجربة</strong>
+                <span class="en-sub">Contract Duration & Probation</span>
+              </td>
+              <td><strong>24 شهراً</strong> (فترة تجربة 90 يوماً نظامية)</td>
+              <td><span class="en-sub">24 Months (Standard 90-day trial per Art. 53)</span></td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>ساعات العمل والراحة الأسبوعية</strong>
+                <span class="en-sub">Working Hours & Weekly Rest</span>
+              </td>
+              <td>8 ساعات يومياً / 48 ساعة أسبوعياً مع يوم راحة أسبوعية مدفوعة</td>
+              <td><span class="en-sub">8 hours/day, 48h/week + 1 weekly rest day (Art. 98)</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- BILINGUAL CONTRACT CLAUSES (CLEAN & LAW COMPLIANT) -->
+        <div class="section-title">
+          <span>شروط وأحكام العقد النظامية (Statutory Terms & Conditions)</span>
+          <span style="font-family: 'Inter', sans-serif; font-size: 9.5px; direction: ltr;">Standard Labor Law Articles</span>
+        </div>
+
+        <div class="clauses-container">
+          <table class="clauses-table">
+            <thead>
+              <tr>
+                <th class="clause-num">#</th>
+                <th class="clause-ar">النص بالعربية (Arabic Official Text)</th>
+                <th class="clause-en">English Translation / Binding Terms</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Clause 1 -->
+              <tr>
+                <td class="clause-num">1</td>
+                <td class="clause-ar">يبدأ سريان هذا العقد من تاريخ مباشرة الطرف الثاني للعمل الفعلي لدى الطرف الأول بالمملكة، وتحدد مدته بسنتين ميلاديتين تتجدد بموافقة الطرفين الكتابية.</td>
+                <td class="clause-en">This contract is effective from the commencement of actual duties in KSA for a duration of two calendar years, renewable only with mutual written consent.</td>
+              </tr>
+
+              <!-- STATUTORY COMPLIANT WAGE CLAUSE -->
+              <tr>
+                <td class="clause-num">4</td>
+                <td class="clause-ar">
+                  <strong>دفع الأجور وحماية الأجور (WPS):</strong>
+                  يلتزم صاحب العمل بإيداع الأجر الأساسي وبدل الإعاشة في اليوم الأول من كل شهر ميلادي مباشرة في الحساب البنكي المعتمد للعامل بموجب المادة (90) من نظام العمل.
+                </td>
+                <td class="clause-en">
+                  <strong>Wage Protection System Compliance:</strong>
+                  Employer undertakes to remit basic wage and food allowance on the 1st of each calendar month directly into Employee's designated bank account per Labor Law Art. 90.
+                </td>
+              </tr>
+
+              <!-- STATUTORY COMPLIANT LEAVE CLAUSE -->
+              <tr>
+                <td class="clause-num">6</td>
+                <td class="clause-ar">
+                  <strong>الإجازة السنوية وتذاكر السفر:</strong>
+                  يستحق العامل إجازة سنوية مدفوعة الأجر مدتها (30) يوماً بعد كل سنة عمل، مع تحمل صاحب العمل تذكرة سفر ذهاباً وإياباً إلى موطن العامل بموجب المادة (109) من نظام العمل.
+                </td>
+                <td class="clause-en">
+                  <strong>Annual Leave & Repatriation:</strong>
+                  Employee is entitled to 30 days fully paid annual leave after each year of service, with round-trip economy airfare to home country fully borne by Employer (Art. 109).
+                </td>
+              </tr>
+
+              <!-- STATUTORY PASSPORT CUSTODY (RESPECTS DECISION 166) -->
+              <tr>
+                <td class="clause-num">8</td>
+                <td class="clause-ar">
+                  <strong>حفظ الوثائق الشخصية وجواز السفر:</strong>
+                  يبقى جواز سفر العامل ووثائقه الشخصية في حيازته الشخصية المطلقة والمستمرة طوال فترة إقامته بالمملكة، تطبيقاً لقرار مجلس الوزراء رقم (166)، ويحظر حجزها قطعياً.
+                </td>
+                <td class="clause-en">
+                  <strong>Personal Document Custody:</strong>
+                  Employee's passport and travel documents shall remain in the exclusive, uninterrupted personal custody of Employee at all times pursuant to Council of Ministers Dec. 166.
+                </td>
+              </tr>
+
+              <!-- STATUTORY DUTIES PROTECTION -->
+              <tr>
+                <td class="clause-num">11</td>
+                <td class="clause-ar">
+                  <strong>حماية المهنة وبيئة العمل:</strong>
+                  يلتزم صاحب العمل بعدم تكليف العامل بأي عمل يختلف اختلافاً جوهرياً عن مهنته المتفق عليها (سائق) ولا يجوز نقله أو تغيير مهنته إلا بموافقته الكتابية الصريحة وفقاً للمادة (38) و(58).
+                </td>
+                <td class="clause-en">
+                  <strong>Professional Scope Protection:</strong>
+                  Employer shall not assign Employee duties substantially different from agreed profession (Driver), and may not alter profession without express written consent (Art. 38, 58).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- RECRUITING AGENCY SECTION (REGISTERED BMET RL-1428) -->
+        <div class="agency-clean-box">
+          <div>
+            <div class="agency-title">
+              <span>✓ مكتب التوظيف المعتمد رسميًا (Licensed Recruiting Agency Record):</span>
+            </div>
+            <div style="font-size: 8.5px; color: #065f46; margin-top: 2px;">
+              <strong>Agency:</strong> Green Bengal Overseas | 
+              <strong>BMET License:</strong> RL-1428 (Verified & Active) | 
+              <strong>Office:</strong> 42 Nayapaltan, VIP Road, Dhaka-1000 | 
+              <strong>Government Fee Cap:</strong> Fully Compliant (No illegal charges)
+            </div>
+          </div>
+          <div>
+            <div class="fee-badge-clean">
+              BMET RL-1428 VERIFIED
+            </div>
+            <div style="font-size: 7.5px; text-align: center; color: #047857; font-weight: 700; margin-top: 1px;">ETHICAL RECRUITMENT</div>
+          </div>
+        </div>
+
+        <!-- FOOTER: SIGNATURES, STAMPS & ATTACHED VISA SLIP -->
+        <div class="footer-section">
+          <!-- First Party Sign -->
+          <div class="sign-block">
+            <div class="sign-title">توقيع وختم صاحب العمل (شركة المدينة)</div>
+            <div class="sign-content">
+              <span class="sign-script">سلطان القحطاني</span>
+              <!-- Kafil Stamp Clean -->
+              <div class="stamp-kafil-clean">
+                <div>شركة المدينة للخدمات اللوجستية</div>
+                <div style="font-size: 6px; font-weight: 600;">س.ت: 1010349821 - جدة</div>
+                <div style="font-size: 6px; letter-spacing: 0.5px;">AL-MADINAH LOGISTICS CO.</div>
+                <div style="color: #047857; font-size: 6px;">معتمد نظامياً</div>
+              </div>
+            </div>
+            <div style="font-size: 8px; color: #64748b; text-align: center;">Sultan Fahad Al-Qahtani</div>
+          </div>
+
+          <!-- Second Party Sign -->
+          <div class="sign-block">
+            <div class="sign-title">توقيع وبصمة الطرف الثاني (العامل)</div>
+            <div class="sign-content" style="display: flex; align-items: center; justify-content: center;">
+              <div class="worker-thumb" title="Worker Biometric Thumbprint"></div>
+              <span style="font-family: 'Amiri', cursive; font-size: 16px; color: #166534; transform: rotate(-3deg); font-weight: 700;">
+                Shafiqul
+              </span>
+            </div>
+            <div style="font-size: 8px; color: #64748b; text-align: center;">Shafiqul Islam (Worker)</div>
+          </div>
+
+          <!-- Attached Work Visa Slip Preview (Driver) -->
+          <div class="attached-visa-card-clean">
+            <div class="visa-header">
+              <span>تأشيرة عمل متطابقة (Attached Visa)</span>
+              <span style="direction: ltr;">MOFA-KSA</span>
+            </div>
+            <div class="visa-grid">
+              <div><strong>Visa No:</strong> 1308492015</div>
+              <div><strong>Pass No:</strong> EG0849216</div>
+              <div><strong>Type:</strong> العمل (Work)</div>
+              <div style="color: #166534; font-weight: 700; background: #dcfce7; padding: 1px 3px; border-radius: 2px;">
+                <strong>المهنة:</strong> سائق (Driver)
+              </div>
+            </div>
+            <div style="font-size: 7px; color: #047857; margin-top: 3px; border-top: 1px dotted #86efac; padding-top: 2px;">
+              Enjaz Registry: Valid & Matched Profession
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Ministry Stamp Overlay -->
+        <div class="stamp-ksa">
+          <div class="stamp-ksa-inner">
+            <div style="font-size: 6.5px; font-weight: 800; color: #1e40af;">وزارة الموارد البشرية</div>
+            <div style="font-size: 5.5px; color: #1e3a8a;">حماية الأجور - الرياض</div>
+            <div style="font-size: 6px; font-weight: 700; margin: 1px 0;">★ WPS ★</div>
+            <div style="font-size: 5px; letter-spacing: 0.5px;">WAGE PROTECTION</div>
+            <div style="font-size: 5px;">MHRSD - KSA</div>
+          </div>
+        </div>
+
+        <!-- Barcode Line Bottom -->
+        <div style="margin-top: 8px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 4px;">
+          <div class="barcode-text">*KSA-WPS-2026-1184920*</div>
+          <div style="font-size: 7.5px; color: #64748b; direction: ltr; font-family: 'Inter', sans-serif;">
+            Official Digital Document Generated via Qiwa Electronic Labor Portal | Verification Key: 3910-4492-WPS-KSA
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

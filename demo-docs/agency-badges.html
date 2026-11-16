@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMET Agency Trust Badges & Verification Registry - ProbashiShield AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: #111827;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --bmet-green: #10b981;
+      --bmet-amber: #f59e0b;
+      --bmet-red: #ef4444;
+      --border-dark: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--text-main);
+      padding: 30px 16px;
+      line-height: 1.5;
+    }
+
+    .bn {
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    /* Top Government Header */
+    .gov-header {
+      background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+      border: 1px solid #047857;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    .gov-emblem-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .gov-title-main {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .gov-title-sub {
+      font-size: 13px;
+      color: #a7f3d0;
+      margin-top: 2px;
+    }
+
+    .live-registry-pill {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid #10b981;
+      color: #6ee7b7;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Search & Filter Bar */
+    .search-filter-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 280px;
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 10px 16px;
+      color: #ffffff;
+      font-size: 13.5px;
+      outline: none;
+    }
+
+    .search-box:focus {
+      border-color: #10b981;
+    }
+
+    .filter-btn {
+      background: #1f2937;
+      border: 1px solid #374151;
+      color: #d1d5db;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: #374151;
+      color: #ffffff;
+      border-color: #9ca3af;
+    }
+
+    /* Agency Grid */
+    .agency-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    /* Agency Card */
+    .agency-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border-dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .agency-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    /* Card Status Variations */
+    .card-green {
+      border-top: 4px solid var(--bmet-green);
+    }
+    .card-amber {
+      border-top: 4px solid var(--bmet-amber);
+    }
+    .card-red {
+      border-top: 4px solid var(--bmet-red);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .agency-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .agency-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Trust Badge Pill */
+    .trust-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-green {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #34d399;
+    }
+
+    .badge-amber {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid #f59e0b;
+      color: #fbbf24;
+    }
+
+    .badge-red {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #f87171;
+    }
+
+    /* Score Dial */
+    .score-dial-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin: 12px 0;
+      padding: 10px 12px;
+      background: #1a2234;
+      border-radius: 8px;
+    }
+
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .score-denom {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .score-label {
+      margin-left: auto;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Metric Rows */
+    .metric-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12.5px;
+      margin-bottom: 16px;
+      border-top: 1px solid #1f2937;
+      padding-top: 12px;
+    }
+
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .metric-lbl {
+      color: var(--text-muted);
+    }
+
+    .metric-val {
+      font-weight: 600;
+      color: #f3f4f6;
+    }
+
+    /* Warning/Caution Callout Box */
+    .alert-box {
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .alert-green {
+      background: rgba(16, 185, 129, 0.08);
+      border-left: 3px solid #10b981;
+      color: #a7f3d0;
+    }
+
+    .alert-amber {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 3px solid #f59e0b;
+      color: #fde68a;
+    }
+
+    .alert-red {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 3px solid #ef4444;
+      color: #fca5a5;
+    }
+
+    /* Action Button */
+    .action-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12.5px;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-green {
+      background: #059669;
+      color: white;
+    }
+    .btn-green:hover { background: #047857; }
+
+    .btn-amber {
+      background: #d97706;
+      color: white;
+    }
+    .btn-amber:hover { background: #b45309; }
+
+    .btn-red {
+      background: #dc2626;
+      color: white;
+    }
+    .btn-red:hover { background: #b91c1c; }
+
+    /* Footer Verification Stamp */
+    .footer-reg-info {
+      text-align: center;
+      margin-top: 36px;
+      font-size: 11px;
+      color: #6b7280;
+      border-top: 1px solid #1f2937;
+      padding-top: 16px;
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: #111827;
+        padding: 0;
+      }
+      .container { max-width: 100%; }
+      .search-filter-bar { display: none; }
+      .agency-card {
+        background: white;
+        border: 1px solid #cbd5e1;
+        box-shadow: none;
+        break-inside: avoid;
+      }
+      .score-dial-wrap { background: #f1f5f9; }
+      .agency-name { color: #0f172a; }
+      .metric-val { color: #0f172a; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- GOVERNMENT REGISTRY HEADER -->
+    <div class="gov-header">
+      <div class="gov-emblem-wrap">
+        <!-- Bangladesh Water Lily Emblem SVG -->
+        <svg width="44" height="44" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="46" fill="#006A4E" stroke="#C5A059" stroke-width="2.5"/>
+          <path d="M50 24 C45 35 44 48 50 60 C56 48 55 35 50 24 Z" fill="#F42A41"/>
+          <path d="M50 36 C40 40 32 46 28 54 C36 54 44 50 50 44 Z" fill="#C5A059"/>
+          <path d="M50 36 C60 40 68 46 72 54 C64 54 56 50 50 44 Z" fill="#C5A059"/>
+        </svg>
+        <div>
+          <div class="gov-title-main">BUREAU OF MANPOWER, EMPLOYMENT AND TRAINING (BMET)</div>
+          <div class="gov-title-sub bn">জনশক্তি কর্মসংস্থান ও প্রশিক্ষণ ব্যুরো — লাইসেন্সধারী রিক্রুটিং এজেন্সি ভেরিফিকেশন ডাটাবেস</div>
+        </div>
+      </div>
+
+      <div class="live-registry-pill">
+        <div class="pulse-dot"></div>
+        <span>GRAPH RAG LIVE CONNECTED</span>
+      </div>
+    </div>
+
+    <!-- SEARCH & FILTER BAR -->
+    <div class="search-filter-bar">
+      <input type="text" class="search-box" value="Search: RL-1428, RL-0892, or Hasan Dalal..." readonly>
+      <button class="filter-btn active">All Agencies (3)</button>
+      <button class="filter-btn" style="color: #34d399;">✓ Verified (Green)</button>
+      <button class="filter-btn" style="color: #fbbf24;">⚠️ Caution (Amber)</button>
+      <button class="filter-btn" style="color: #f87171;">🚨 Blacklisted (Red)</button>
+    </div>
+
+    <!-- 3 AGENCY PROFILES GRID -->
+    <div class="agency-grid">
+
+      <!-- PROFILE 1: GREEN (VERIFIED & ETHICAL) -->
+      <div class="agency-card card-green">
+        <div>
+          <div class="card-header">
+            <div>
+              <div class="agency-name">Green Bengal Overseas</div>
+              <div class="agency-sub">BMET License: <strong>RL-1428</strong></div>
+              <div class="agency-sub bn">স্বত্বাধিকারী: আলহাজ্ব মো: কবির হোসেন</div>
+            </div>
+            <div class="trust-badge badge-green">
+              <span>★ VERIFIED ETHICAL</span>
+            </div>
+          </div>
+
+          <div class="score-dial-wrap">
+            <div class="score-num" style="color: #10b981;">96</div>
+            <div class="score-denom">/100</div>
+            <div class="score-label" style="color: #34d399;">
+              GRADE A+ TRUST<br>
+              <span style="font-size: 10px; color: #9ca3af;">BMET Verified Active</span>
+            </div>
+          </div>
+
+          <div class="metric-list">
+            <div class="metric-row">
+              <span class="metric-lbl">Total Worker Deployments:</span>
+              <span class="metric-val">4,820 Migrants</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Complaints in Last 24 Mo:</span>
+              <span class="metric-val" style="color: #34d399;">0 Active</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">WPS Wage Compliance Rate:</span>
+              <span class="metric-val" style="color: #34d399;">98.4% On-Time</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Govt Migration Fee Ceiling:</span>
+              <span class="metric-val" style="color: #34d399;">100% Compliant</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">License Expiry Date:</span>
+              <span class="metric-val">31 DEC 2027</span>
+            </div>
+          </div>
+
+          <div class="alert-box alert-green bn">
+            ✅ <strong>নিরাপদ এজেন্সি:</strong> বিগত ৪ বছরে কোনো বেতন বকেয়া বা চুক্তি ভঙ্গের রেকর্ড নেই। অনুমোদিত ফি ও বৈধ চুক্তিপত্র প্রদান নিশ্চিত করে।
+          </div>
+        </div>
+
+        <button class="action-btn btn-green">
+          <span>✓ View Verified Demand Letters</span>
+        </button>
+      </div>
+
+      <!-- PROFILE 2: RED (UNREGISTERED / BLACKLISTED FRAUD) -->
+      <div class="agency-card card-red">
+        <div>
+          <div class="card-header">
+            <div>
+              <div class="agency-name">Al-Hasan Overseas & Travels</div>
+              <div class="agency-sub">Broker: <strong>Hasan Dalal</strong> (+880 1712-984531)</div>
+              <div class="agency-sub bn">অবস্থান: পল্টন / চৌদ্দগ্রাম, কুমিল্লা</div>
+            </div>
+            <div class="trust-badge badge-red">
+              <span>🚨 FRAUD ALERT</span>
+            </div>
+          </div>
+
+          <div class="score-dial-wrap">
+            <div class="score-num" style="color: #ef4444;">12</div>
+            <div class="score-denom">/100</div>
+            <div class="score-label" style="color: #f87171;">
+              CRITICAL RISK<br>
+              <span style="font-size: 10px; color: #9ca3af;">UNREGISTERED MIDDLEMAN</span>
+            </div>
+          </div>
+
+          <div class="metric-list">
+            <div class="metric-row">
+              <span class="metric-lbl">BMET RL Registration:</span>
+              <span class="metric-val" style="color: #f87171; font-weight: 700;">NOT FOUND (Unlicensed)</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Police / BMET Complaints:</span>
+              <span class="metric-val" style="color: #f87171; font-weight: 700;">14 Active Cases</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Primary Fraud Pattern:</span>
+              <span class="metric-val" style="color: #f87171;">Job Mismatch (Driver → Cleaner)</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Illegal Fee Extortion:</span>
+              <span class="metric-val" style="color: #f87171;">Tk 3,50,000 Demanded</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Linked High-Risk Kafeel:</span>
+              <span class="metric-val">Al-Bashaer Trading (Riyadh)</span>
+            </div>
+          </div>
+
+          <div class="alert-box alert-red bn">
+            🚨 <strong>চরম প্রতারণার ঝুঁকি:</strong> এই ব্যক্তি/প্রতিষ্ঠানের কোনো সরকারি লাইসেন্স নেই। ড্রাইভারের নামে ক্লিনার ভিসা দিয়ে টাকা আত্মসাতের ১৪টি অভিযোগ রয়েছে। কোনো টাকা দিবেন না!
+          </div>
+        </div>
+
+        <button class="action-btn btn-red">
+          <span>🚨 Report to BMET Vigilance Taskforce</span>
+        </button>
+      </div>
+
+      <!-- PROFILE 3: AMBER (CAUTION / HIGH COMPLAINT HISTORY) -->
+      <div class="agency-card card-amber">
+        <div>
+          <div class="card-header">
+            <div>
+              <div class="agency-name">Gulf Horizon Manpower Services</div>
+              <div class="agency-sub">BMET License: <strong>RL-0892</strong></div>
+              <div class="agency-sub bn">অফিস: বিজয়নগর, ঢাকা</div>
+            </div>
+            <div class="trust-badge badge-amber">
+              <span>⚠️ UNDER REVIEW</span>
+            </div>
+          </div>
+
+          <div class="score-dial-wrap">
+            <div class="score-num" style="color: #f59e0b;">54</div>
+            <div class="score-denom">/100</div>
+            <div class="score-label" style="color: #fbbf24;">
+              MODERATE RISK<br>
+              <span style="font-size: 10px; color: #9ca3af;">High Complaint Velocity</span>
+            </div>
+          </div>
+
+          <div class="metric-list">
+            <div class="metric-row">
+              <span class="metric-lbl">Total Worker Deployments:</span>
+              <span class="metric-val">1,240 Migrants</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Active Unresolved Complaints:</span>
+              <span class="metric-val" style="color: #fbbf24; font-weight: 700;">19 Disputes (11 Unresolved)</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Flagged Sponsor (Kafeel) Links:</span>
+              <span class="metric-val" style="color: #fbbf24;">4 Employers (Riyadh & Dammam)</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Primary Reported Issue:</span>
+              <span class="metric-val">Salary Delays > 90 Days</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-lbl">Probationary Status:</span>
+              <span class="metric-val">Under Investigation by BMET</span>
+            </div>
+          </div>
+
+          <div class="alert-box alert-amber bn">
+            ⚠️ <strong>সতর্কতা:</strong> এজেন্সির লাইসেন্স থাকলেও এদের পাঠানো শ্রমিকদের মধ্যে ১৯ জন সৌদি আরবে বেতন বকেয়া ও পাসপোর্ট আটকে রাখার অভিযোগ করেছেন। যাওয়ার আগে চুক্তি যাচাই বাধ্যতামূলক।
+          </div>
+        </div>
+
+        <button class="action-btn btn-amber">
+          <span>⚠️ Inspect Kafeel Complaint Log</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- FOOTER INFO -->
+    <div class="footer-reg-info">
+      <div>Ministry of Expatriates' Welfare and Overseas Employment • Bureau of Manpower, Employment and Training (BMET)</div>
+      <div style="margin-top: 4px;">Data synchronized with ProbashiShield AI Graph RAG knowledge graph (Neo4j) & Government Gazette Registry</div>
+    </div>
+
+  </div>
+
+</body>
+</html>

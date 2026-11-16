@@ -4,6 +4,7 @@ import { useAuth } from '../lib/auth'
 import { db } from '../lib/firebase'
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore'
 import { uploadContract, fileUrl, analyzeContract } from '../lib/api'
+import { evaluateAuditWithRAG, type FullAuditReport } from '../lib/rag'
 
 export default function Audit() {
   const { user } = useAuth()
@@ -13,9 +14,28 @@ export default function Audit() {
   const [state, setState] = useState<'idle' | 'uploading' | 'done' | 'error'>('idle')
   const [msg, setMsg] = useState('')
   const [report, setReport] = useState('')
+  const [ragReport, setRagReport] = useState<FullAuditReport | null>(null)
+  const [speaking, setSpeaking] = useState(false)
   const [forensics, setForensics] = useState<{ score: number; heat: string | null } | null>(null)
   const [ocrText, setOcrText] = useState('')
   const [ocrBusy, setOcrBusy] = useState(false)
+
+  function playVoiceSummary(text: string) {
+    if (!('speechSynthesis' in window)) return
+    if (speaking) {
+      window.speechSynthesis.cancel()
+      setSpeaking(false)
+      return
+    }
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'bn-BD'
+    utterance.rate = 0.95
+    utterance.onend = () => setSpeaking(false)
+    utterance.onerror = () => setSpeaking(false)
+    setSpeaking(true)
+    window.speechSynthesis.speak(utterance)
+  }
 
   // Tesseract.js Arabic+English OCR, lazy-loaded, runs fully in browser
   async function runOCR(f: File) {
@@ -67,6 +87,8 @@ export default function Audit() {
     setState('idle')
     setForensics(null)
     setOcrText('')
+    setRagReport(null)
+    setReport('')
     if (f.type === 'image/jpeg' || f.type === 'image/png') runELA(f)
     if (f.type.startsWith('image/')) runOCR(f)
   }
@@ -86,16 +108,41 @@ export default function Audit() {
         status: 'analyzing',
         createdAt: serverTimestamp(),
       })
+
+      const localRag = evaluateAuditWithRAG({
+        documentText: `${ocrText} ${file.name}`,
+        brokerPromise: promise,
+      })
+      setRagReport(localRag)
+
       try {
-        const analysis = await analyzeContract(key, ocrText || undefined)
+        const analysis = await analyzeContract(key, ocrText || undefined, promise || undefined)
         setReport(analysis)
-        await updateDoc(doc(db, 'audits', ref.id), { aiReport: analysis, status: 'done', analyzedAt: serverTimestamp() })
+        const combinedRag = evaluateAuditWithRAG({
+          documentText: `${ocrText} ${analysis}`,
+          brokerPromise: promise,
+        })
+        setRagReport(combinedRag)
+        await updateDoc(doc(db, 'audits', ref.id), {
+          aiReport: analysis,
+          ragScore: combinedRag.riskScore,
+          ragRisk: combinedRag.overallRisk,
+          status: 'done',
+          analyzedAt: serverTimestamp(),
+        })
         setState('done')
-        setMsg('অডিট সম্পন্ন! নিচে AI রিপোর্ট দেখুন।')
+        setMsg('অডিট সম্পন্ন! নিচে AI ও ট্রিপল-RAG রিপোর্ট দেখুন।')
       } catch {
-        await updateDoc(doc(db, 'audits', ref.id), { status: 'queued', note: 'AI analysis pending' })
+        setReport(localRag.factBasedReportMarkdown)
+        await updateDoc(doc(db, 'audits', ref.id), {
+          aiReport: localRag.factBasedReportMarkdown,
+          ragScore: localRag.riskScore,
+          ragRisk: localRag.overallRisk,
+          status: 'done',
+          note: 'Evaluated via ProbashiShield Contextual RAG',
+        })
         setState('done')
-        setMsg('চুক্তি আপলোড হয়েছে। AI বিশ্লেষণ একটু পরে চলবে, result শীঘ্রই পাবেন।')
+        setMsg('অডিট সম্পন্ন (লোকাল নলেজ RAG ইঞ্জিন দ্বারা বিশ্লেষণকৃত)। নিচে রিপোর্ট দেখুন।')
       }
     } catch {
       setState('error')
@@ -171,9 +218,104 @@ export default function Audit() {
               </div>
             )}
 
+            {ragReport && (
+              <div className="space-y-4 rounded-2xl border border-line bg-white p-6 shadow-sm">
+                {/* Risk Banner Header */}
+                <div className={`flex flex-wrap items-center justify-between gap-4 rounded-xl p-4 ${ragReport.overallRisk === 'CRITICAL' || ragReport.overallRisk === 'HIGH' ? 'bg-danger/10 border border-danger/30 text-danger' : 'bg-safe/10 border border-safe/30 text-safe'}`}>
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider">রিস্ক স্কোর (Risk Score)</span>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-extrabold">{ragReport.riskScore}</span>
+                      <span className="text-sm font-semibold">/ ১০০ ({ragReport.overallRisk} RISK)</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => playVoiceSummary(ragReport.banglaVoiceSummary)}
+                    className="flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-bold text-white hover:bg-brand-dark transition-all"
+                  >
+                    <span>{speaking ? '⏹️ ভয়েস বন্ধ করুন' : '🔊 বাংলায় শুনুন (Voice)'}</span>
+                  </button>
+                </div>
+
+                {/* Discrepancies Grid */}
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className={`rounded-xl p-4 border ${ragReport.discrepancies.professionMismatch ? 'bg-danger/5 border-danger/20' : 'bg-mist border-line'}`}>
+                    <span className="text-xs font-bold text-ink/60 uppercase">আসল পেশা vs প্রতিশ্রুতি</span>
+                    <div className="mt-1 font-bold text-ink">
+                      {ragReport.extractedProfession}
+                    </div>
+                    {ragReport.discrepancies.professionMismatch && (
+                      <span className="mt-1 inline-block text-xs font-semibold text-danger">
+                        ⚠️ প্রতিশ্রুতি ছিল: ড্রাইভার (Driver)
+                      </span>
+                    )}
+                  </div>
+
+                  <div className={`rounded-xl p-4 border ${ragReport.discrepancies.salaryMismatch ? 'bg-danger/5 border-danger/20' : 'bg-mist border-line'}`}>
+                    <span className="text-xs font-bold text-ink/60 uppercase">মাসিক বেতন (WPS)</span>
+                    <div className="mt-1 font-bold text-ink">
+                      SAR {ragReport.extractedSalarySAR}
+                      {ragReport.discrepancies.salaryMismatch && (
+                        <span className="ml-2 text-xs font-semibold text-danger">
+                          (-{ragReport.discrepancies.salaryDeficitPct}% কম)
+                        </span>
+                      )}
+                    </div>
+                    {ragReport.discrepancies.salaryMismatch && (
+                      <span className="mt-1 inline-block text-xs font-semibold text-danger">
+                        ⚠️ প্রতিশ্রুত বেতন: SAR {ragReport.discrepancies.promisedSalary}
+                      </span>
+                    )}
+                  </div>
+
+                  {ragReport.kafilVerification && (
+                    <div className="rounded-xl p-4 border border-line bg-mist">
+                      <span className="text-xs font-bold text-ink/60 uppercase">কফিল / নিয়োগকর্তা (Graph RAG)</span>
+                      <div className="mt-1 font-bold text-ink text-sm">
+                        {ragReport.kafilVerification.nameEn}
+                      </div>
+                      <span className={`text-xs font-semibold ${ragReport.kafilVerification.trustScore < 50 ? 'text-danger' : 'text-safe'}`}>
+                        ট্রাস্ট স্কোর: {ragReport.kafilVerification.trustScore}/১০০ ({ragReport.kafilVerification.wageWithholdingRisk} Risk)
+                      </span>
+                    </div>
+                  )}
+
+                  {ragReport.agencyVerification && (
+                    <div className="rounded-xl p-4 border border-line bg-mist">
+                      <span className="text-xs font-bold text-ink/60 uppercase">এজেন্সি স্ট্যাটাস (BMET Registry)</span>
+                      <div className="mt-1 font-bold text-ink text-sm">
+                        {ragReport.agencyVerification.name}
+                      </div>
+                      <span className={`text-xs font-semibold ${ragReport.agencyVerification.status === 'VERIFIED_ACTIVE' ? 'text-safe' : 'text-danger'}`}>
+                        {ragReport.agencyVerification.status === 'VERIFIED_ACTIVE' ? '✓ BMET লাইসেন্সধারী অনুমোদিত' : '🚨 অননুমোদিত দালাল'}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Flagged Clauses List */}
+                {ragReport.findings.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="font-bold text-ink text-sm mb-2">শনাক্তকৃত আইনি ঝুঁকি ও শর্তসমূহ:</h4>
+                    <div className="space-y-2">
+                      {ragReport.findings.map((f, i) => (
+                        <div key={i} className="rounded-lg border border-danger/20 bg-danger/5 p-3 text-sm">
+                          <div className="flex items-center justify-between font-bold text-danger">
+                            <span>{f.titleBn}</span>
+                            <span className="text-xs bg-danger/10 px-2 py-0.5 rounded">{f.citation}</span>
+                          </div>
+                          <p className="mt-1 text-xs text-ink/80">{f.descriptionBn}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {report && (
               <div className="rounded-2xl border border-brand/30 bg-brand/5 p-6">
-                <h3 className="mb-2 font-bold text-brand">AI অডিট রিপোর্ট</h3>
+                <h3 className="mb-2 font-bold text-brand">AI অডিট পূর্ণাঙ্গ রিপোর্ট</h3>
                 <div className="whitespace-pre-wrap text-sm leading-relaxed text-ink/85">{report}</div>
               </div>
             )}

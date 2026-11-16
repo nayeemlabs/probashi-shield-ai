@@ -15,10 +15,14 @@ Write-Host "`n=== [2/3] Deploying to Cloudflare Pages ===" -ForegroundColor Cyan
 & "$npmBin\wrangler.cmd" pages deploy "$root\web\dist" --project-name probashi-shield --branch main
 if ($LASTEXITCODE -ne 0) { throw "Cloudflare Pages deploy failed" }
 
-Write-Host "`n=== [3/3] Deploying Firebase rules ===" -ForegroundColor Cyan
+Write-Host "`n=== [3/4] Deploying Firebase rules ===" -ForegroundColor Cyan
 & "$npmBin\firebase.cmd" deploy --only firestore:rules --project probashi-shield
 if ($LASTEXITCODE -ne 0) { Write-Warning "Firestore rules deploy failed — check 'firebase login'" }
-& "$npmBin\firebase.cmd" deploy --only storage --project probashi-shield
-if ($LASTEXITCODE -ne 0) { Write-Warning "Storage rules skipped — enable Storage in Firebase console first" }
+
+Write-Host "`n=== [4/4] Deploying API Worker ===" -ForegroundColor Cyan
+Push-Location "$root\workers\api"
+& "$npmBin\wrangler.cmd" deploy
+Pop-Location
+if ($LASTEXITCODE -ne 0) { Write-Warning "Worker deploy failed" }
 
 Write-Host "`nDone! Live at: https://probashi-shield.pages.dev" -ForegroundColor Green

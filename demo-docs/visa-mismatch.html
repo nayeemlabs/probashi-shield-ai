@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visa Mismatch Evidence - Driver vs Cleaner (1304928174)</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0a0f1d;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      font-family: sans-serif;
+    }
+    .wrapper {
+      max-width: 1200px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .btn-bar {
+      margin-bottom: 16px;
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .btn-secondary {
+      background: #1e293b;
+    }
+  </style>
+</head>
+<body>
+  <div class="btn-bar">
+    <a href="visa-mismatch.png" download class="btn">⬇️ Download PNG (1200x900)</a>
+    <button onclick="window.print()" class="btn btn-secondary">🖨️ Print to PDF</button>
+    <a href="GROUND_TRUTH.md" class="btn btn-secondary">Ground Truth Report</a>
+  </div>
+  <div class="wrapper">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="main-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0f1d"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+
+    <!-- Visa Card Gradient (KSA MOFA Official Cream/Green) -->
+    <linearGradient id="visa-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fefefe"/>
+      <stop offset="100%" stop-color="#f3f8f5"/>
+    </linearGradient>
+
+    <!-- Phone Card Gradient -->
+    <linearGradient id="phone-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111b21"/>
+      <stop offset="100%" stop-color="#0b141a"/>
+    </linearGradient>
+
+    <!-- Alert Red Gradient -->
+    <linearGradient id="alert-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="shadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="900" fill="url(#main-bg)"/>
+
+  <!-- Subtle Grid Pattern -->
+  <g opacity="0.05" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="150" x2="1200" y2="150"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="450" x2="1200" y2="450"/>
+    <line x1="0" y1="600" x2="1200" y2="600"/>
+    <line x1="0" y1="750" x2="1200" y2="750"/>
+    <line x1="300" y1="0" x2="300" y2="900"/>
+    <line x1="600" y1="0" x2="600" y2="900"/>
+    <line x1="900" y1="0" x2="900" y2="900"/>
+  </g>
+
+  <!-- Top Banner: ProbashiShield AI Audit Header -->
+  <g transform="translate(60, 40)">
+    <rect width="1080" height="74" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <circle cx="36" cy="37" r="16" fill="#006C35"/>
+    <text x="36" y="42" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#ffffff" text-anchor="middle">PS</text>
+    <text x="68" y="34" font-family="Arial, sans-serif" font-weight="bold" font-size="18" fill="#ffffff">ProbashiShield AI — Pre-Departure Forensic Discrepancy Engine</text>
+    <text x="68" y="55" font-family="Arial, sans-serif" font-size="12" fill="#94a3b8">Document Cross-Audit: Verbal / Chat Commitment vs Official KSA MOFA Visa Sticker</text>
+    
+    <!-- Status Pill -->
+    <rect x="910" y="20" width="145" height="34" rx="17" fill="#ef4444" opacity="0.15" stroke="#ef4444" stroke-width="1.5"/>
+    <circle cx="928" cy="37" r="5" fill="#ef4444"/>
+    <text x="942" y="42" font-family="Arial, sans-serif" font-weight="bold" font-size="12" fill="#f87171">FRAUD FLAGGED</text>
+  </g>
+
+  <!-- LEFT PANEL: Official Saudi Visa Sticker (Evidence A) -->
+  <g transform="translate(60, 140)" filter="url(#shadow)">
+    <!-- Visa Container -->
+    <rect width="520" height="540" rx="12" fill="url(#visa-bg)" stroke="#cbd5e1" stroke-width="2"/>
+    
+    <!-- Visa Security Border -->
+    <rect x="10" y="10" width="500" height="520" rx="8" fill="none" stroke="#006C35" stroke-width="1.5" stroke-dasharray="6,3"/>
+
+    <!-- Visa Header -->
+    <rect x="12" y="12" width="496" height="64" rx="6" fill="#006C35"/>
+    <!-- KSA Emblem Palm -->
+    <circle cx="44" cy="44" r="18" fill="#ffffff" opacity="0.15"/>
+    <text x="44" y="50" font-family="Arial, sans-serif" font-size="20" fill="#ffffff" text-anchor="middle">🇸🇦</text>
+    <text x="74" y="36" font-family="Arial, sans-serif" font-weight="bold" font-size="13" fill="#ffffff">المملكة العربية السعودية — وزارة الخارجية</text>
+    <text x="74" y="54" font-family="Arial, sans-serif" font-weight="bold" font-size="10" fill="#bbf7d0" letter-spacing="1">KINGDOM OF SAUDI ARABIA • MOFA WORK VISA</text>
+
+    <!-- Enjaz Barcode -->
+    <g transform="translate(24, 88)">
+      <rect width="472" height="36" fill="#f8fafc" stroke="#e2e8f0"/>
+      <!-- Simulated Barcode Lines -->
+      <line x1="20" y1="6" x2="20" y2="30" stroke="#000" stroke-width="2"/>
+      <line x1="24" y1="6" x2="24" y2="30" stroke="#000" stroke-width="3"/>
+      <line x1="30" y1="6" x2="30" y2="30" stroke="#000" stroke-width="1"/>
+      <line x1="34" y1="6" x2="34" y2="30" stroke="#000" stroke-width="4"/>
+      <line x1="42" y1="6" x2="42" y2="30" stroke="#000" stroke-width="2"/>
+      <line x1="48" y1="6" x2="48" y2="30" stroke="#000" stroke-width="3"/>
+      <line x1="56" y1="6" x2="56" y2="30" stroke="#000" stroke-width="1"/>
+      <line x1="62" y1="6" x2="62" y2="30" stroke="#000" stroke-width="4"/>
+      <text x="360" y="24" font-family="monospace" font-size="13" font-weight="bold" fill="#334155">E2948104829</text>
+    </g>
+
+    <!-- Visa Data Fields Table -->
+    <g transform="translate(24, 136)" font-family="Arial, sans-serif">
+      <!-- Row 1 -->
+      <rect x="0" y="0" width="472" height="38" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="12" y="24" font-size="11" fill="#64748b">Visa No / رقم التأشيرة:</text>
+      <text x="140" y="24" font-size="13" font-weight="bold" fill="#0f172a">1304928174</text>
+      <text x="310" y="24" font-size="11" fill="#64748b">Type / النوع:</text>
+      <text x="390" y="24" font-size="13" font-weight="bold" fill="#006C35">عمل (Work)</text>
+
+      <!-- Row 2 -->
+      <rect x="0" y="38" width="472" height="38" fill="#f8fafc" stroke="#e2e8f0"/>
+      <text x="12" y="62" font-size="11" fill="#64748b">Name / الاسم:</text>
+      <text x="140" y="62" font-size="12" font-weight="bold" fill="#0f172a">SHAFIQUL ISLAM (شفيق الإسلام)</text>
+
+      <!-- Row 3 -->
+      <rect x="0" y="76" width="472" height="38" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="12" y="100" font-size="11" fill="#64748b">Passport / الجواز:</text>
+      <text x="140" y="100" font-size="13" font-weight="bold" fill="#0f172a">EG0849216</text>
+      <text x="310" y="100" font-size="11" fill="#64748b">Nationality:</text>
+      <text x="390" y="100" font-size="12" font-weight="bold" fill="#0f172a">BANGLADESH</text>
+
+      <!-- Row 4 -->
+      <rect x="0" y="114" width="472" height="38" fill="#f8fafc" stroke="#e2e8f0"/>
+      <text x="12" y="138" font-size="11" fill="#64748b">Sponsor / صاحب العمل:</text>
+      <text x="140" y="138" font-size="11" font-weight="bold" fill="#0f172a">AL-BASHAER TRADING EST (مؤسسة البشائر)</text>
+
+      <!-- Row 5: THE CORE FRAUD FIELD - PROFESSION CLEANER -->
+      <rect x="0" y="152" width="472" height="60" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+      <text x="12" y="180" font-size="12" font-weight="bold" fill="#b91c1c">Profession / المهنة:</text>
+      <!-- Arabized Cleaner -->
+      <rect x="140" y="162" width="220" height="38" rx="4" fill="#fee2e2" stroke="#dc2626"/>
+      <text x="150" y="186" font-size="16" font-weight="bold" fill="#dc2626">عامل نظافة (CLEANER)</text>
+      <text x="370" y="186" font-size="11" font-weight="bold" fill="#b91c1c">🚨 MISMATCH!</text>
+      <text x="12" y="204" font-size="9.5" fill="#ef4444" font-weight="bold">Enjaz Occupation Code: 911201 (Domestic/Office Cleaner)</text>
+
+      <!-- Row 6 -->
+      <rect x="0" y="212" width="472" height="38" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="12" y="236" font-size="11" fill="#64748b">Date of Issue:</text>
+      <text x="140" y="236" font-size="11" font-weight="bold" fill="#0f172a">10/01/2026</text>
+      <text x="310" y="236" font-size="11" fill="#64748b">Validity:</text>
+      <text x="390" y="236" font-size="11" font-weight="bold" fill="#0f172a">90 Days</text>
+    </g>
+
+    <!-- Attached MoFA Verification Chop -->
+    <g transform="translate(380, 420)">
+      <circle cx="45" cy="45" r="40" fill="none" stroke="#1e40af" stroke-width="2" stroke-dasharray="4,2"/>
+      <circle cx="45" cy="45" r="32" fill="none" stroke="#1e40af" stroke-width="1"/>
+      <text x="45" y="42" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#1e40af" text-anchor="middle">MINISTRY OF FOREIGN AFFAIRS</text>
+      <text x="45" y="52" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#1e40af" text-anchor="middle">★ KSA MOFA ★</text>
+    </g>
+
+    <!-- Footer label -->
+    <text x="24" y="500" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">Official Document: Saudi Ministry of Foreign Affairs (Enjaz Verified)</text>
+  </g>
+
+  <!-- RIGHT PANEL: Broker WhatsApp Chat Evidence (Evidence B) -->
+  <g transform="translate(620, 140)" filter="url(#shadow)">
+    <!-- Phone Mockup Container -->
+    <rect width="520" height="540" rx="12" fill="url(#phone-bg)" stroke="#334155" stroke-width="2"/>
+    
+    <!-- Phone Top Bar -->
+    <rect width="520" height="42" rx="12" fill="#202c33"/>
+    <circle cx="28" cy="21" r="14" fill="#8b5cf6"/>
+    <text x="28" y="26" font-family="Arial, sans-serif" font-weight="bold" font-size="11" fill="#ffffff" text-anchor="middle">HD</text>
+    <text x="52" y="19" font-family="Arial, sans-serif" font-weight="bold" font-size="12" fill="#ffffff">Hasan Dalal (Al-Hasan Travels)</text>
+    <text x="52" y="32" font-family="Arial, sans-serif" font-size="9" fill="#8696a0">+880 1712-984531 • Unregistered Broker</text>
+    <text x="480" y="26" font-family="Arial, sans-serif" font-size="14" fill="#aebac1">📞 📹</text>
+
+    <!-- Chat Stream -->
+    <g transform="translate(18, 54)">
+      <!-- Date Banner -->
+      <rect x="180" y="10" width="124" height="22" rx="4" fill="#182229"/>
+      <text x="242" y="25" font-family="Arial, sans-serif" font-size="10" fill="#8696a0" text-anchor="middle">8 January 2026</text>
+
+      <!-- Broker Voice Message Bubble -->
+      <rect x="0" y="42" width="380" height="66" rx="8" fill="#202c33"/>
+      <circle cx="28" cy="72" r="16" fill="#00a884"/>
+      <text x="28" y="77" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" text-anchor="middle">▶</text>
+      <!-- Audio bars -->
+      <g stroke="#8696a0" stroke-width="2.5" stroke-linecap="round">
+        <line x1="56" y1="72" x2="56" y2="72"/>
+        <line x1="64" y1="64" x2="64" y2="80"/>
+        <line x1="72" y1="58" x2="72" y2="86"/>
+        <line x1="80" y1="66" x2="80" y2="78"/>
+        <line x1="88" y1="62" x2="88" y2="82"/>
+        <line x1="96" y1="68" x2="96" y2="76"/>
+        <line x1="104" y1="58" x2="104" y2="86"/>
+        <line x1="112" y1="65" x2="112" y2="79"/>
+      </g>
+      <text x="310" y="76" font-family="Arial, sans-serif" font-size="11" fill="#8696a0">0:42</text>
+      <text x="14" y="98" font-family="Arial, sans-serif" font-size="9" fill="#94a3b8">Voice Note: "Shafik vai, tomare VIP driver hishabe Riyadh pathaitesi..."</text>
+
+      <!-- Broker Explicit Text Promise Bubble -->
+      <rect x="0" y="120" width="450" height="90" rx="8" fill="#202c33"/>
+      <text x="14" y="142" font-family="Arial, sans-serif" font-weight="bold" font-size="12" fill="#ffd279">⚠️ BROKER EXPLICIT WRITTEN COMMITMENT:</text>
+      <text x="14" y="162" font-family="Arial, sans-serif" font-size="11.5" fill="#e9edef">"Shafik vai, your Riyadh Private Driver (ড্রাইভার) visa is ready!"</text>
+      <text x="14" y="180" font-family="Arial, sans-serif" font-size="11.5" fill="#38bdf8" font-weight="bold">"Monthly salary SAR 2,500 (২৫০০ রিয়াল) + free food &amp; room."</text>
+      <text x="14" y="198" font-family="Arial, sans-serif" font-size="10" fill="#aebac1">"Total processing cost Tk 3,50,000. Send Tk 1,50,000 advance now."</text>
+      <text x="410" y="202" font-family="Arial, sans-serif" font-size="9" fill="#8696a0">10:15 AM</text>
+
+      <!-- Migrant Query -->
+      <rect x="90" y="222" width="390" height="54" rx="8" fill="#005c4b"/>
+      <text x="104" y="242" font-family="Arial, sans-serif" font-size="11" fill="#ffffff">"Hasan vai, visa paper e ki Driver lekha ache? Ekjon bollo</text>
+      <text x="104" y="258" font-family="Arial, sans-serif" font-size="11" fill="#ffffff">paper e cleaner likhe naki dhoka dey?"</text>
+      <text x="440" y="268" font-family="Arial, sans-serif" font-size="9" fill="#aebac1">10:24 AM ✓✓</text>
+
+      <!-- Broker Fraudulent Assurance -->
+      <rect x="0" y="288" width="460" height="90" rx="8" fill="#202c33"/>
+      <text x="14" y="310" font-family="Arial, sans-serif" font-weight="bold" font-size="11" fill="#f87171">🚨 PREDATORY DECEPTION STATEMENT:</text>
+      <text x="14" y="328" font-family="Arial, sans-serif" font-size="11" fill="#e9edef">"Arre bhai oita tax kom dewar jonno Arabi paper e 'Amel/Cleaner'</text>
+      <text x="14" y="344" font-family="Arial, sans-serif" font-size="11" fill="#e9edef">formality hishabe likhse. Riyadh namlei company gari dibe!"</text>
+      <text x="14" y="364" font-family="Arial, sans-serif" font-size="10.5" fill="#fca5a5" font-weight="bold">"Ami 50 jon pathaisi. Kal advance na dile visa cancel!"</text>
+      <text x="420" y="370" font-family="Arial, sans-serif" font-size="9" fill="#8696a0">10:28 AM</text>
+    </g>
+
+    <!-- Bottom summary callout inside right phone -->
+    <rect x="18" y="446" width="484" height="74" rx="8" fill="#182229" stroke="#b91c1c"/>
+    <text x="32" y="468" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f87171">FORENSIC EVIDENCE SUMMARY:</text>
+    <text x="32" y="486" font-family="Arial, sans-serif" font-size="10.5" fill="#e2e8f0">• Verbal / Chat Promise: Driver (سائق) — Salary SAR 2,500/mo</text>
+    <text x="32" y="504" font-family="Arial, sans-serif" font-size="10.5" fill="#e2e8f0">• Actual Government Visa: Cleaner (عامل نظافة) — Salary SAR 800/mo</text>
+  </g>
+
+  <!-- BOTTOM FULL-WIDTH AUDIT VERDICT CALLOUT -->
+  <g transform="translate(60, 705)">
+    <rect width="1080" height="155" rx="10" fill="url(#alert-grad)" stroke="#fca5a5" stroke-width="1.5" filter="url(#shadow)"/>
+    
+    <!-- Warning Icon -->
+    <circle cx="50" cy="50" r="28" fill="#ffffff" opacity="0.15"/>
+    <text x="50" y="60" font-family="Arial, sans-serif" font-size="28" fill="#ffffff" text-anchor="middle">⚠️</text>
+
+    <!-- Title & Bengali Summary -->
+    <text x="96" y="40" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#ffffff">CRITICAL DISCREPANCY DETECTED: JOB &amp; SALARY FRAUD (চরম প্রতারণা)</text>
+    <text x="96" y="66" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#fef08a">
+      সতর্কতা! দালালের প্রতিশ্রুতি ড্রাইভার (২৫০০ রিয়াল), কিন্তু সরকারি ভিসা ক্লিনার (عامل نظافة - ৮০০ রিয়াল)।
+    </text>
+
+    <!-- 3 Core Audit Metrics -->
+    <g transform="translate(96, 84)" font-family="Arial, sans-serif" font-size="12">
+      <!-- Metric 1 -->
+      <rect x="0" y="0" width="280" height="52" rx="6" fill="#000000" opacity="0.25"/>
+      <text x="14" y="22" fill="#fecaca" font-weight="bold">OCCUPATION DOWNGRADE:</text>
+      <text x="14" y="40" fill="#ffffff" font-weight="bold">Private Driver ➔ Cleaner (عامل نظافة)</text>
+
+      <!-- Metric 2 -->
+      <rect x="295" y="0" width="280" height="52" rx="6" fill="#000000" opacity="0.25"/>
+      <text x="309" y="22" fill="#fecaca" font-weight="bold">SALARY SUPPRESSION:</text>
+      <text x="309" y="40" fill="#ffffff" font-weight="bold">SAR 2,500 ➔ SAR 800 (-68% Deficit)</text>
+
+      <!-- Metric 3 -->
+      <rect x="590" y="0" width="370" height="52" rx="6" fill="#000000" opacity="0.25"/>
+      <text x="604" y="22" fill="#fecaca" font-weight="bold">PROBASHISHIELD RECOMMENDATION:</text>
+      <text x="604" y="40" fill="#fef08a" font-weight="bold">DO NOT DEPART / CANCEL PAYMENT (রিয়াদ যাবেন না)</text>
+    </g>
+  </g>
+
+</svg>
+  </div>
+</body>
+</html>

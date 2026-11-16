@@ -166,18 +166,39 @@ export default {
       })
     }
 
-    // POST /api/analyze, run Workers AI vision on an owned contract image
+    // POST /api/analyze, run Workers AI / Gemini / Groq vision on an owned contract image with Triple-RAG
     if (req.method === 'POST' && url.pathname === '/api/analyze') {
       const user = auth ? await verifyFirebaseToken(auth, env) : null
       if (!user) return json({ error: 'unauthorized' }, 401)
-      const { key, ocrText } = (await req.json()) as { key?: string; ocrText?: string }
+      const { key, ocrText, brokerPromise } = (await req.json()) as { key?: string; ocrText?: string; brokerPromise?: string }
       if (!key || !key.startsWith(`contracts/${user.uid}/`)) return json({ error: 'forbidden' }, 403)
       const obj = await env.CONTRACTS.get(key)
       if (!obj) return json({ error: 'not found' }, 404)
       const buf = await obj.arrayBuffer()
       const mime = obj.httpMetadata?.contentType ?? 'image/jpeg'
-      const ocrHint = ocrText ? `OCR-extracted text from the document (Arabic/English, may contain errors): """${ocrText.slice(0, 3000)}""". Use it to verify and enrich your analysis.` : ''
-      const prompt = `This is an employment contract or visa document, possibly in Arabic. ${ocrHint} Extract and report in Bengali (Bangla): 1) job title/profession, 2) monthly salary and currency, 3) contract duration, 4) employer/kafil name if visible, 5) any suspicious or unusual clauses, 6) overall risk assessment (LOW/MEDIUM/HIGH) with one-line reason. Be concise.`
+      const ocrHint = ocrText ? `OCR-extracted text from the document (Arabic/English): """${ocrText.slice(0, 3000)}""". Use it to verify and enrich your analysis.` : ''
+      const promiseHint = brokerPromise ? `BROKER VERBAL PROMISE DECLARED BY WORKER: """${brokerPromise}""". You MUST compare the document against this promise and report any discrepancies (e.g. promised Driver vs actual Cleaner, promised 2500 SAR vs actual 800 SAR).` : ''
+      const ragKnowledge = `LEGAL KNOWLEDGE BASE (KSA LABOR LAW & BMET):
+- Article 38: Unlawful to employ in profession different from work permit (e.g. Driver promised vs Cleaner actual is ILLEGAL).
+- Article 90: Wages must be paid unconditionally via WPS bank transfer on due date. Deferred or discretionary payment is ILLEGAL.
+- Article 109: Paid annual leave of 21-30 days per year with return ticket is mandatory. 2-year leave ban is VOID.
+- Council of Ministers Decision 166: Confiscation of worker passport by employer/sponsor is STRICTLY ILLEGAL (penalty up to 20,000 SAR).
+- Bangladesh Emigration Act 2013: Unregistered broker fees exceeding gov ceiling (e.g. Tk 3.5 Lakh) are ILLEGAL.`
+
+      const prompt = `You are ProbashiShield AI, an autonomous legal auditor for Bangladeshi migrant workers. Analyze this Gulf employment contract or visa document.
+${promiseHint}
+${ocrHint}
+${ragKnowledge}
+
+Provide a structured, fact-based audit report in Bengali (Bangla) covering:
+1) আসল পেশা (Actual Profession extracted from Arabic/English) & any mismatch with broker promise
+2) মাসিক বেতন ও মুদ্রা (Monthly Salary) & comparison with promised amount
+3) নিয়োগকর্তা / কফিলের নাম (Employer/Kafil Name)
+4) চুক্তি ও ছুটির মেয়াদ (Duration & Leave)
+5) অবৈধ বা বিপজ্জনক শর্ত (Suspicious/Illegal clauses, citing specific labor law articles: passport hold, wage discretion, unilateral reassignment)
+6) সামগ্রিক ঝুঁকি (Overall Risk: LOW / MEDIUM / HIGH / CRITICAL)
+7) বাংলা ভয়েস সামারি (Bangla audio advisory transcript for the worker).
+Be concise, clear, and direct.`
 
       // Primary: Gemini 2.5 Flash (best Arabic document understanding)
       if (env.GEMINI_API_KEY) {
@@ -220,7 +241,8 @@ export default {
         } catch { /* fall through */ }
       }
 
-      // Fallback: Workers AI LLaVA (free, weaker on dense Arabic)
+      // Fallback: Workers AI LLaVA (free, weaker on dense Arabic; skip huge files to avoid memory blowup)
+      if (buf.byteLength > 4 * 1024 * 1024) return json({ error: 'file too large for fallback engine, retry' }, 413)
       const out = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', {
         image: [...new Uint8Array(buf)],
         prompt,

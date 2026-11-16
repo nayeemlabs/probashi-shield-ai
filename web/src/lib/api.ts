@@ -45,14 +45,14 @@ export async function getAdminStats(): Promise<AdminStats> {
   return res.json()
 }
 
-export async function analyzeContract(key: string, ocrText?: string): Promise<string> {
+export async function analyzeContract(key: string, ocrText?: string, brokerPromise?: string): Promise<string> {
   const user = auth.currentUser
   if (!user) throw new Error('not-authenticated')
   const token = await user.getIdToken()
   const res = await fetch(`${API_URL}/api/analyze`, {
     method: 'POST',
     headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ key, ocrText }),
+    body: JSON.stringify({ key, ocrText, brokerPromise }),
   })
   if (!res.ok) throw new Error(`analysis failed (${res.status})`)
   const data = await res.json()

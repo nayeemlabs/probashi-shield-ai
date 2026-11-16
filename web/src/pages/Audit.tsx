@@ -13,6 +13,37 @@ export default function Audit() {
   const [state, setState] = useState<'idle' | 'uploading' | 'done' | 'error'>('idle')
   const [msg, setMsg] = useState('')
   const [report, setReport] = useState('')
+  const [forensics, setForensics] = useState<{ score: number; heat: string | null } | null>(null)
+
+  // ELA (Error Level Analysis) — open-source photo-forensics technique
+  // Re-save at JPEG q0.9, diff vs original, amplify: edited regions glow.
+  async function runELA(f: File) {
+    try {
+      const bmp = await createImageBitmap(f)
+      const w = bmp.width, h = bmp.height
+      const c1 = document.createElement('canvas'); c1.width = w; c1.height = h
+      c1.getContext('2d')!.drawImage(bmp, 0, 0)
+      const orig = c1.getContext('2d')!.getImageData(0, 0, w, h).data
+      // re-encode at known JPEG quality
+      const blob = await new Promise<Blob>((r) => c1.toBlob((b) => r(b!), 'image/jpeg', 0.9))
+      const bmp2 = await createImageBitmap(blob)
+      const c2 = document.createElement('canvas'); c2.width = w; c2.height = h
+      c2.getContext('2d')!.drawImage(bmp2, 0, 0)
+      const resaved = c2.getContext('2d')!.getImageData(0, 0, w, h).data
+      const heat = document.createElement('canvas'); heat.width = w; heat.height = h
+      const hctx = heat.getContext('2d')!
+      const out = hctx.createImageData(w, h)
+      let hot = 0, total = w * h
+      for (let i = 0; i < orig.length; i += 4) {
+        const d = Math.abs(orig[i] - resaved[i]) + Math.abs(orig[i + 1] - resaved[i + 1]) + Math.abs(orig[i + 2] - resaved[i + 2])
+        const v = Math.min(255, d * 6)
+        if (d > 60) hot++
+        out.data[i] = v; out.data[i + 1] = 0; out.data[i + 2] = 255 - v; out.data[i + 3] = 255
+      }
+      hctx.putImageData(out, 0, 0)
+      setForensics({ score: +(hot / total * 100).toFixed(1), heat: heat.toDataURL('image/jpeg', 0.7) })
+    } catch { setForensics(null) }
+  }
 
   function onPick(e: ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0]
@@ -20,6 +51,8 @@ export default function Audit() {
     setFile(f)
     setPreview(URL.createObjectURL(f))
     setState('idle')
+    setForensics(null)
+    if (f.type === 'image/jpeg' || f.type === 'image/png') runELA(f)
   }
 
   async function submit() {
@@ -33,6 +66,7 @@ export default function Audit() {
         imageKey: key,
         imageUrl: fileUrl(key),
         brokerPromise: promise,
+        forensicsScore: forensics?.score ?? null,
         status: 'analyzing',
         createdAt: serverTimestamp(),
       })
@@ -76,6 +110,19 @@ export default function Audit() {
               )}
               <input type="file" accept="image/*,application/pdf" onChange={onPick} className="mt-4 block w-full text-sm" />
             </div>
+
+            {forensics && (
+              <div className="rounded-2xl border border-line bg-white p-5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-ink">ছবি ফরেনসিকস (ELA)</h3>
+                  <span className={`rounded-full px-3 py-1 text-sm font-bold ${forensics.score > 15 ? 'bg-danger/10 text-danger' : forensics.score > 5 ? 'bg-warn/10 text-warn' : 'bg-safe/10 text-safe'}`}>
+                    {forensics.score > 15 ? 'সন্দেহজনক' : forensics.score > 5 ? 'মাঝারি' : 'পরিষ্কার'} · {forensics.score}%
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-ink/50">এডিট/জাল করা রিজিয়ন লাল-নীল heatmap-এ দেখা যায়।</p>
+                {forensics.heat && <img src={forensics.heat} alt="ELA heatmap" className="mt-3 max-h-48 rounded-lg" />}
+              </div>
+            )}
 
             <div className="rounded-2xl border border-line bg-white p-6">
               <label className="mb-1 block font-medium text-ink/80">দালাল যা বলেছিল (ঐচ্ছিক)</label>

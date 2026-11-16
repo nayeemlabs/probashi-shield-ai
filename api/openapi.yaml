@@ -1,0 +1,115 @@
+openapi: 3.1.0
+info:
+  title: ProbashiShield API
+  version: 0.3.0
+  description: |
+    Backend API for ProbashiShield AI — contract image upload, AI analysis,
+    file serving, and admin stats. Fronted by Cloudflare Worker `probashi-api`,
+    backed by R2 object storage. Auth = Firebase ID token (RS256, Google certs).
+servers:
+  - url: https://probashi-api.probashishield.workers.dev
+security:
+  - bearerAuth: []
+paths:
+  /api/upload:
+    post:
+      summary: Upload contract/visa image to R2
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema: { type: string, format: binary }
+      parameters:
+        - in: header
+          name: x-file-name
+          schema: { type: string }
+          required: true
+        - in: header
+          name: content-type
+          schema: { type: string, enum: [image/jpeg, image/png, image/webp, application/pdf] }
+      responses:
+        '200':
+          description: Stored
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key: { type: string, example: "contracts/{uid}/1700000000-contract.jpg" }
+                  size: { type: integer }
+        '401': { description: Missing/invalid Firebase token }
+        '413': { description: File exceeds 10MB }
+        '415': { description: Unsupported content type }
+  /api/analyze:
+    post:
+      summary: AI analysis of an uploaded document (Gemini → Groq → LLaVA fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [key]
+              properties:
+                key: { type: string, description: "R2 object key, must be owned by caller" }
+                ocrText: { type: string, description: "Optional client-side OCR text (Tesseract ara+eng)" }
+      responses:
+        '200':
+          description: Analysis complete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  analysis: { type: string, description: "Bangla audit report" }
+                  engine: { type: string, enum: [gemini-2.5-flash, groq-llama4-scout, llava] }
+        '403': { description: Key not owned by caller }
+        '404': { description: Object not found }
+  /api/file/{key}:
+    get:
+      summary: Stream stored object (owner or admin only)
+      parameters:
+        - in: path
+          name: key
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Object bytes
+          content:
+            image/jpeg: {}
+            image/png: {}
+            application/pdf: {}
+        '403': { description: Not owner/admin }
+        '404': { description: Not found }
+  /api/admin/stats:
+    get:
+      summary: R2 usage + platform stats (admin claim or allowlisted email)
+      responses:
+        '200':
+          description: Stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  r2:
+                    type: object
+                    properties:
+                      bucket: { type: string }
+                      objects: { type: integer }
+                      totalBytes: { type: integer }
+                      totalGB: { type: number }
+                  freeTier:
+                    type: object
+                    properties:
+                      storageGB: { type: integer }
+                      usedPct: { type: number }
+        '403': { description: Not admin }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Firebase ID token; verified via Google x509 certs (iss/aud/exp checked)

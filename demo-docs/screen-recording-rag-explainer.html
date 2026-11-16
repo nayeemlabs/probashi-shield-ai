@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ProbashiShield — Triple-RAG Architecture (Screen Recording)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Fira+Code:wght@400;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--brand:#1D4ED8;--safe:#16A34A;--warn:#D97706;--danger:#DC2626;--ink:#1E293B;}
+body{font-family:'Inter',sans-serif;background:#0F172A;color:white;width:1280px;height:720px;overflow:hidden;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+@keyframes flow{0%{stroke-dashoffset:200;}100%{stroke-dashoffset:0;}}
+@keyframes glow{0%,100%{box-shadow:0 0 10px rgba(29,78,216,.3);}50%{box-shadow:0 0 25px rgba(29,78,216,.8);}}
+@keyframes slideRight{from{width:0;}to{width:var(--w,100%);}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+
+.phase{position:absolute;inset:0;padding:40px;opacity:0;transition:opacity .7s;pointer-events:none;}
+.phase.active{opacity:1;pointer-events:all;}
+
+/* ── PHASE 1: PROBLEM STATS ── */
+#stats-bg{background:linear-gradient(135deg,#0F172A 0%,#1E1B4B 50%,#0F172A 100%);}
+.stat-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px;text-align:center;animation:fadeUp .6s ease both;}
+.stat-num{font-size:52px;font-weight:900;line-height:1;}
+.stat-label{font-size:14px;color:rgba(255,255,255,.6);margin-top:8px;line-height:1.4;}
+.stat-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:6px;}
+
+/* ── PHASE 2: RAG ARCHITECTURE ── */
+#rag-bg{background:#0F172A;}
+.node{position:absolute;border-radius:16px;padding:16px 20px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:10px;animation:fadeIn .5s ease both;}
+.node-icon{font-size:22px;}
+.node-title{font-weight:900;font-size:14px;}
+.node-sub{font-size:11px;font-weight:400;opacity:.7;margin-top:2px;}
+.arrow{position:absolute;font-size:20px;color:rgba(255,255,255,.4);animation:fadeIn .5s ease both;}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;}
+
+/* ── PHASE 3: LAW CITATIONS ── */
+#law-bg{background:linear-gradient(135deg,#0F172A,#1a0a0a);}
+.law-card{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:16px;padding:16px 20px;animation:fadeUp .5s ease both;}
+.law-article{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#F87171;}
+.law-text{font-size:13px;color:rgba(255,255,255,.85);margin-top:6px;line-height:1.5;}
+.law-penalty{font-size:11px;color:#FCA5A5;margin-top:8px;font-weight:600;}
+
+/* timeline */
+.timeline{position:fixed;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.1);}
+.timeline-fill{height:100%;background:var(--brand);animation:slideRight 24s linear forwards;}
+</style>
+</head>
+<body>
+
+<!-- PHASE 1: PROBLEM STATISTICS -->
+<div class="phase active" id="p1" style="background:linear-gradient(135deg,#0F172A 0%,#1E1B4B 50%,#0F172A 100%);">
+  <div style="text-align:center;margin-bottom:40px;">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:8px;">THE PROBLEM</div>
+    <div style="font-size:38px;font-weight:900;line-height:1.2;">Bangladesh's <span style="color:#F87171;">Migration Crisis</span></div>
+    <div style="font-size:16px;color:rgba(255,255,255,.5);margin-top:10px;">12 million workers. Zero contract protection.</div>
+  </div>
+  
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
+    <div class="stat-card" style="animation-delay:.1s;">
+      <div class="stat-num" style="color:#60A5FA;">১.২ কোটি</div>
+      <div class="stat-label">বাংলাদেশি প্রবাসী শ্রমিক</div>
+      <div class="stat-sub">12M+ working abroad (2024)</div>
+    </div>
+    <div class="stat-card" style="animation-delay:.25s;">
+      <div class="stat-num" style="color:#F87171;">৩৩%</div>
+      <div class="stat-label">চুক্তিতে অবৈধ শর্ত থাকে</div>
+      <div class="stat-sub">1 in 3 contracts has illegal clauses</div>
+    </div>
+    <div class="stat-card" style="animation-delay:.4s;">
+      <div class="stat-num" style="color:#FBBF24;">৳৩.৫ লাখ</div>
+      <div class="stat-label">গড় দালাল ফি (অবৈধ)</div>
+      <div class="stat-sub">Average broker extortion fee</div>
+    </div>
+    <div class="stat-card" style="animation-delay:.55s;">
+      <div class="stat-num" style="color:#34D399;">৳৮৩,০০০ কোটি</div>
+      <div class="stat-label">বার্ষিক রেমিট্যান্স</div>
+      <div class="stat-sub">$7.6B remittance (FY 2024)</div>
+    </div>
+  </div>
+  
+  <div style="margin-top:30px;text-align:center;padding:20px;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.2);border-radius:16px;animation:fadeUp .6s .7s ease both;opacity:0;">
+    <div style="font-size:15px;font-weight:700;color:#FCA5A5;">Most workers sign Arabic contracts they cannot read — with no legal recourse once abroad.</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.4);margin-top:6px;">Until now.</div>
+  </div>
+</div>
+
+<!-- PHASE 2: RAG ARCHITECTURE -->
+<div class="phase" id="p2" style="background:#0F172A;">
+  <div style="text-align:center;margin-bottom:30px;">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:8px;">AI APPROACH</div>
+    <div style="font-size:32px;font-weight:900;">Triple-RAG <span style="color:#60A5FA;">Audit Engine</span></div>
+  </div>
+  
+  <div style="position:relative;height:460px;">
+    
+    <!-- INPUT -->
+    <div class="node" style="left:40px;top:180px;background:rgba(29,78,216,.15);border:2px solid rgba(29,78,216,.4);animation-delay:.1s;">
+      <div class="node-icon">📄</div>
+      <div><div class="node-title">Input</div><div class="node-sub">Arabic contract<br>photo / PDF</div></div>
+    </div>
+    
+    <!-- ARROW 1 -->
+    <div style="position:absolute;left:200px;top:200px;font-size:28px;color:#3B82F6;animation:fadeIn .4s .3s both;">→</div>
+    
+    <!-- OCR -->
+    <div class="node" style="left:240px;top:160px;background:rgba(16,163,74,.12);border:2px solid rgba(16,163,74,.35);animation-delay:.35s;">
+      <div class="node-icon">🔤</div>
+      <div><div class="node-title">OCR Engine</div><div class="node-sub">Tesseract.js<br>Arabic + English</div></div>
+    </div>
+    
+    <!-- ARROW 2 -->
+    <div style="position:absolute;left:430px;top:200px;font-size:28px;color:#3B82F6;animation:fadeIn .4s .5s both;">→</div>
+    
+    <!-- GEMINI -->
+    <div class="node" style="left:470px;top:100px;background:rgba(29,78,216,.2);border:2px solid rgba(29,78,216,.5);animation-delay:.6s;animation:glow 3s ease infinite,fadeIn .5s .6s both;">
+      <div class="node-icon">🧠</div>
+      <div><div class="node-title">Gemini 2.5 Flash</div><div class="node-sub">Arabic NLP<br>Clause extraction<br>Vision AI</div></div>
+    </div>
+    
+    <!-- ARROW to RAG -->
+    <div style="position:absolute;left:680px;top:140px;font-size:28px;color:#3B82F6;animation:fadeIn .4s .8s both;">→</div>
+    
+    <!-- CONTEXTUAL RAG -->
+    <div class="node" style="right:40px;top:40px;background:rgba(217,119,6,.12);border:2px solid rgba(217,119,6,.35);animation-delay:1s;">
+      <div class="node-icon">📚</div>
+      <div><div class="node-title">Contextual RAG</div><div class="node-sub">KSA Labor Law<br>6 articles indexed<br>Citation engine</div></div>
+    </div>
+    
+    <!-- GRAPH RAG -->
+    <div class="node" style="right:40px;top:200px;background:rgba(139,92,246,.12);border:2px solid rgba(139,92,246,.35);animation-delay:1.2s;">
+      <div class="node-icon">🕸️</div>
+      <div><div class="node-title">Graph RAG</div><div class="node-sub">Sponsor knowledge graph<br>Agency BMET registry<br>Complaint history</div></div>
+    </div>
+    
+    <!-- DISCREPANCY ENGINE -->
+    <div class="node" style="right:40px;top:360px;background:rgba(220,38,38,.12);border:2px solid rgba(220,38,38,.35);animation-delay:1.4s;">
+      <div class="node-icon">⚖️</div>
+      <div><div class="node-title">Discrepancy Engine</div><div class="node-sub">Broker promise vs<br>actual contract<br>% deficit calc</div></div>
+    </div>
+    
+    <!-- OUTPUT -->
+    <div class="node" style="left:380px;bottom:30px;background:rgba(16,163,74,.15);border:2px solid rgba(16,163,74,.5);animation-delay:1.8s;">
+      <div class="node-icon">📊</div>
+      <div>
+        <div class="node-title">Output (Bangla)</div>
+        <div class="node-sub">Risk score · Voice summary · Legal citations · Fraud flags</div>
+      </div>
+    </div>
+    
+    <!-- Tech badges -->
+    <div style="position:absolute;bottom:30px;left:40px;display:flex;flex-direction:column;gap:6px;animation:fadeIn .5s 2s both;">
+      <div style="font-size:11px;color:rgba(255,255,255,.4);font-weight:700;text-transform:uppercase;letter-spacing:.05em;">Stack</div>
+      <span class="badge" style="background:rgba(29,78,216,.2);color:#93C5FD;">React 19 + TypeScript</span>
+      <span class="badge" style="background:rgba(29,78,216,.2);color:#93C5FD;">Cloudflare Workers + R2</span>
+      <span class="badge" style="background:rgba(29,78,216,.2);color:#93C5FD;">Firebase Auth + Firestore</span>
+      <span class="badge" style="background:rgba(29,78,216,.2);color:#93C5FD;">Groq Llama-4 Scout (fallback)</span>
+    </div>
+    
+    <!-- Live URL -->
+    <div style="position:absolute;bottom:30px;right:40px;text-align:right;animation:fadeIn .5s 2.2s both;">
+      <div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:6px;">LIVE AT</div>
+      <div style="font-size:14px;font-weight:700;color:#60A5FA;">probashi-shield.pages.dev</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.4);">Deployed on Cloudflare (Global CDN)</div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 3: LAW KNOWLEDGE BASE -->
+<div class="phase" id="p3" style="background:linear-gradient(135deg,#0F172A,#1a0a1e);">
+  <div style="text-align:center;margin-bottom:28px;">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:8px;">LEGAL KNOWLEDGE BASE</div>
+    <div style="font-size:30px;font-weight:900;">The AI <span style="color:#F87171;">doesn't guess</span> — it cites the law</div>
+    <div style="font-size:14px;color:rgba(255,255,255,.45);margin-top:8px;">RAG corpus: KSA Labor Law + Bangladesh Emigration Act 2013</div>
+  </div>
+  
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="law-card" style="animation-delay:.1s;">
+      <div class="law-article">KSA Labor Law · Article 38</div>
+      <div class="law-text">Unlawful to employ a worker in a profession other than the one stated in the work permit or employment contract.</div>
+      <div class="law-penalty">🚨 Applied when: Driver promised → Cleaner assigned</div>
+    </div>
+    <div class="law-card" style="animation-delay:.2s;">
+      <div class="law-article">KSA Labor Law · Article 90 + WPS</div>
+      <div class="law-text">Wages must be paid unconditionally via WPS bank transfer on the due date. Deferred or discretionary payment is strictly illegal.</div>
+      <div class="law-penalty">🚨 Applied when: "Employer discretion" wage clause detected</div>
+    </div>
+    <div class="law-card" style="animation-delay:.3s;">
+      <div class="law-article">KSA Labor Law · Article 109</div>
+      <div class="law-text">Paid annual leave of 21-30 days per year with economy return airfare is mandatory. 2-year leave ban clauses are void.</div>
+      <div class="law-penalty">🚨 Applied when: "No leave for 24 months" clause found</div>
+    </div>
+    <div class="law-card" style="animation-delay:.4s;">
+      <div class="law-article">Council of Ministers Decision 166</div>
+      <div class="law-text">Confiscation of worker's passport or Iqama by employer/sponsor is strictly prohibited. Penalty up to 20,000 SAR.</div>
+      <div class="law-penalty">🚨 Applied when: Passport surrender clause detected</div>
+    </div>
+    <div class="law-card" style="animation-delay:.5s;grid-column:span 2;">
+      <div class="law-article">Bangladesh Emigration Act 2013</div>
+      <div class="law-text">Unregistered recruitment agents collecting fees exceeding the government ceiling (Tk 84,000 for KSA) are committing a criminal offence.</div>
+      <div class="law-penalty">🚨 Applied when: Broker fee &gt; ৳৮৪,০০০ detected (e.g. ৳৩.৫ লাখ = illegal)</div>
+    </div>
+  </div>
+  
+  <div style="margin-top:16px;text-align:center;animation:fadeIn .5s .8s both;opacity:0;">
+    <span style="background:rgba(16,163,74,.15);border:1px solid rgba(16,163,74,.3);color:#4ADE80;border-radius:999px;padding:8px 24px;font-size:13px;font-weight:700;">✅ 100% Test Accuracy — 50/50 Tests Passed · Triple-RAG Engine</span>
+  </div>
+</div>
+
+<div class="timeline"><div class="timeline-fill"></div></div>
+
+<script>
+setTimeout(()=>{ document.getElementById('p1').classList.remove('active'); document.getElementById('p2').classList.add('active'); }, 8000);
+setTimeout(()=>{ document.getElementById('p2').classList.remove('active'); document.getElementById('p3').classList.add('active'); }, 16000);
+setTimeout(()=>{ document.getElementById('p3').classList.remove('active'); document.getElementById('p1').classList.add('active'); }, 24000);
+</script>
+</body>
+</html>

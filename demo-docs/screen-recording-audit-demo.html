@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProbashiShield — Live Audit Demo (Screen Recording)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Hind+Siliguri:wght@400;600;700&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --brand: #1D4ED8; --brand-dark: #1E3A8A; --brand-light: #3B82F6;
+    --safe: #16A34A; --warn: #D97706; --danger: #DC2626;
+    --ink: #1E293B; --mist: #F8FAFC; --line: #E2E8F0;
+  }
+  body { font-family: 'Inter', sans-serif; background: #0F172A; color: white; width: 1280px; height: 720px; overflow: hidden; position: relative; }
+  
+  /* ── BROWSER CHROME ── */
+  .browser { width: 1280px; height: 720px; display: flex; flex-direction: column; }
+  .browser-bar { background: #1E293B; height: 48px; display: flex; align-items: center; padding: 0 16px; gap: 10px; flex-shrink: 0; border-bottom: 1px solid #334155; }
+  .dots span { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .dots .r { background: #EF4444; } .dots .y { background: #F59E0B; } .dots .g { background: #22C55E; }
+  .url-bar { flex: 1; background: #334155; border-radius: 8px; height: 28px; display: flex; align-items: center; padding: 0 12px; font-size: 12px; color: #94A3B8; font-family: monospace; }
+  .lock { color: #22C55E; margin-right: 6px; font-size: 11px; }
+  
+  /* ── APP CHROME ── */
+  .app { flex: 1; background: var(--mist); overflow: hidden; position: relative; }
+  
+  /* ── NAV ── */
+  nav { background: white; border-bottom: 1px solid var(--line); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 18px; color: var(--brand); }
+  .nav-logo span { font-size: 22px; }
+  .nav-links { display: flex; gap: 24px; font-size: 13px; color: #64748B; }
+  .nav-links a { text-decoration: none; color: inherit; }
+  .nav-links a.active { color: var(--brand); font-weight: 700; }
+  .nav-user { background: var(--brand); color: white; border-radius: 999px; padding: 6px 16px; font-size: 13px; font-weight: 700; }
+  
+  /* ── MAIN CONTENT ── */
+  .main { padding: 24px; height: calc(720px - 56px - 48px); overflow: hidden; display: flex; gap: 20px; }
+  .left-col { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+  .right-col { width: 420px; display: flex; flex-direction: column; gap: 16px; }
+  
+  /* ── CARDS ── */
+  .card { background: white; border-radius: 16px; border: 1px solid var(--line); padding: 20px; }
+  .card-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+  
+  /* ── FILE DROP ── */
+  .drop-zone { border: 2px dashed var(--line); border-radius: 12px; padding: 20px; text-align: center; color: #94A3B8; font-size: 13px; position: relative; }
+  .doc-preview { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+  
+  /* ── OCR BADGE ── */
+  .ocr-badge { display: inline-flex; align-items: center; gap: 6px; background: #EFF6FF; border: 1px solid #BFDBFE; color: var(--brand); border-radius: 999px; padding: 4px 12px; font-size: 11px; font-weight: 700; }
+  
+  /* ── PROMISE BOX ── */
+  .promise-box textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 12px; color: var(--ink); resize: none; height: 56px; font-family: 'Inter', sans-serif; }
+  
+  /* ── BUTTON ── */
+  .btn-audit { width: 100%; background: var(--brand); color: white; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; }
+  
+  /* ── RAG REPORT ── */
+  .risk-banner { border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .risk-banner.high { background: #FEF2F2; border: 1px solid #FECACA; }
+  .risk-score { font-size: 36px; font-weight: 900; color: var(--danger); }
+  .risk-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--danger); }
+  .risk-tag { background: var(--danger); color: white; border-radius: 999px; padding: 6px 16px; font-size: 12px; font-weight: 700; }
+  .voice-btn { background: var(--brand); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  
+  /* ── DISCREPANCY GRID ── */
+  .disc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .disc-cell { border-radius: 10px; padding: 12px; border: 1px solid; }
+  .disc-cell.bad { background: #FEF2F2; border-color: #FECACA; }
+  .disc-cell.ok  { background: #F0FDF4; border-color: #BBF7D0; }
+  .disc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #94A3B8; margin-bottom: 4px; }
+  .disc-value { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .disc-warn { font-size: 11px; color: var(--danger); font-weight: 600; margin-top: 2px; }
+  
+  /* ── FINDINGS ── */
+  .finding { border-radius: 10px; background: #FEF2F2; border: 1px solid #FECACA; padding: 10px 12px; margin-bottom: 8px; }
+  .finding-head { display: flex; justify-content: space-between; align-items: center; }
+  .finding-title { font-size: 12px; font-weight: 700; color: var(--danger); }
+  .finding-citation { font-size: 10px; background: #FECACA; color: var(--danger); border-radius: 4px; padding: 2px 6px; font-weight: 700; }
+  .finding-desc { font-size: 11px; color: #64748B; margin-top: 4px; }
+  
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes typing { from { width:0; } to { width:100%; } }
+  @keyframes blink { 0%,100% { border-color:transparent; } 50% { border-color:var(--brand); } }
+  @keyframes scan { 0%{top:10px;} 100%{top:calc(100% - 10px);} }
+  @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.04);} }
+  @keyframes spinBar { from{width:0;} to{width:100%;} }
+  @keyframes countUp { from{opacity:0;} to{opacity:1;} }
+  @keyframes slideIn { from{transform:translateX(100%);opacity:0;} to{transform:translateX(0);opacity:1;} }
+  
+  .hidden { opacity: 0; }
+  .fade-in { animation: fadeIn .5s ease forwards; }
+  
+  /* ── STEP INDICATOR ── */
+  .steps { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; }
+  .step { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #94A3B8; transition: all .4s; flex-shrink: 0; }
+  .step.active { background: var(--brand); border-color: var(--brand); color: white; }
+  .step.done { background: var(--safe); border-color: var(--safe); color: white; }
+  .step-line { flex: 1; height: 2px; background: var(--line); transition: background .4s; }
+  .step-line.done { background: var(--safe); }
+  
+  /* ── SCAN OVERLAY ── */
+  .scan-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; }
+  .scan-line { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--brand), transparent); animation: scan 1.6s ease-in-out infinite; }
+  
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { background: var(--line); border-radius: 999px; height: 6px; overflow: hidden; }
+  .progress-bar { height: 100%; background: var(--brand); border-radius: 999px; animation: spinBar 2.2s ease forwards; }
+  
+  /* ── ENGINE BADGE ── */
+  .engine-badge { display: inline-flex; align-items: center; gap: 6px; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 999px; padding: 4px 10px; font-size: 10px; font-weight: 700; color: var(--brand); }
+  
+  /* timeline control */
+  .timeline { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: rgba(255,255,255,.1); }
+  .timeline-fill { height: 100%; background: var(--brand); animation: spinBar 20s linear forwards; }
+  
+  /* ── PHASE SCREENS ── */
+  .phase { position: absolute; inset: 0; padding: 24px; display: flex; gap: 20px; opacity: 0; transition: opacity .6s; pointer-events: none; }
+  .phase.active { opacity: 1; pointer-events: all; }
+</style>
+</head>
+<body>
+<div class="browser">
+  <!-- Browser chrome -->
+  <div class="browser-bar">
+    <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    <div class="url-bar"><span class="lock">🔒</span> probashi-shield.pages.dev/audit</div>
+  </div>
+  
+  <div class="app" style="position:relative; overflow:hidden;">
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo"><span>🛡️</span> ProbashiShield</div>
+      <div class="nav-links">
+        <a href="#">হোম</a>
+        <a href="#" class="active">অডিট ✦</a>
+        <a href="#">পরিবার</a>
+        <a href="#">এজেন্সি</a>
+      </div>
+      <div class="nav-user">শফিকুল ইসলাম</div>
+    </nav>
+    
+    <!-- PHASE 1: Upload (0–3s) -->
+    <div class="phase active" id="p1">
+      <div class="left-col">
+        <div style="padding:0 0 4px;">
+          <div style="font-size:22px;font-weight:900;color:var(--ink);">চুক্তি ও ভিসা অডিট</div>
+          <div style="font-size:13px;color:#64748B;margin-top:4px;">আরবি বা ইংরেজি চুক্তির ছবি তুলুন — AI বাংলায় রিপোর্ট দেবে</div>
+        </div>
+        
+        <div class="steps">
+          <div class="step active">1</div>
+          <div class="step-line"></div>
+          <div class="step">2</div>
+          <div class="step-line"></div>
+          <div class="step">3</div>
+          <div class="step-line"></div>
+          <div class="step">4</div>
+          <div style="font-size:11px;color:#94A3B8;margin-left:4px;">আপলোড → OCR → AI বিশ্লেষণ → রিপোর্ট</div>
+        </div>
+        
+        <div class="card" style="flex:1;">
+          <div class="card-title">📄 চুক্তির ছবি আপলোড করুন</div>
+          <div class="drop-zone" style="position:relative;">
+            <div style="font-size:32px;margin-bottom:8px;">📄</div>
+            <div style="font-weight:700;color:#475569;">কন্ট্রাক্ট বা ভিসার ছবি এখানে দিন</div>
+            <div style="font-size:11px;margin-top:4px;">JPG, PNG, PDF সাপোর্টেড · Max 10MB</div>
+            <div style="margin-top:16px;background:var(--brand);color:white;padding:8px 24px;border-radius:8px;display:inline-block;font-size:13px;font-weight:700;">ফাইল বেছে নিন</div>
+          </div>
+        </div>
+        
+        <div class="card promise-box">
+          <div class="card-title">💬 দালাল যা বলেছিল (ঐচ্ছিক)</div>
+          <textarea>ড্রাইভারের কাজ, বেতন ২৫০০ রিয়াল, সৌদি আরব</textarea>
+          <div style="font-size:11px;color:#94A3B8;margin-top:6px;">এটা দিলে AI প্রতিশ্রুতি আর চুক্তির পার্থক্য দেখাবে</div>
+        </div>
+      </div>
+      
+      <div class="right-col">
+        <div class="card" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-color:#BFDBFE;">
+          <div style="font-size:13px;font-weight:700;color:var(--brand);margin-bottom:12px;">ℹ️ কীভাবে কাজ করে?</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:var(--brand);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">১</div><div style="font-size:12px;color:#1E3A8A;">ছবি আপলোড করুন (আরবি/ইংরেজি)</div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:var(--brand);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">২</div><div style="font-size:12px;color:#1E3A8A;">AI পড়ে বিশ্লেষণ করে (Gemini 2.5 Flash)</div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:var(--brand);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">৩</div><div style="font-size:12px;color:#1E3A8A;">Triple-RAG: আইন মিলিয়ে ফলাফল দেয়</div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:var(--brand);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">৪</div><div style="font-size:12px;color:#1E3A8A;">বাংলায় ভয়েস রিপোর্ট + আইনি উদ্ধৃতি</div></div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;">📊 পরিসংখ্যান</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:#64748B;">আজকের অডিট</span><span style="font-weight:700;color:var(--brand);">৩,২১৮</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:#64748B;">প্রতারণা শনাক্ত</span><span style="font-weight:700;color:var(--danger);">৮৪৭ 🚨</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:#64748B;">সঠিক অডিট নির্ভুলতা</span><span style="font-weight:700;color:var(--safe);">৯৭.৩%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- PHASE 2: Processing (3–7s) -->
+    <div class="phase" id="p2">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;gap:24px;">
+        <div style="font-size:48px;animation:pulse 1.2s ease infinite;">🔍</div>
+        <div style="font-size:22px;font-weight:900;color:var(--ink);">বিশ্লেষণ চলছে...</div>
+        
+        <div style="width:480px;display:flex;flex-direction:column;gap:16px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:#64748B;">📷 OCR — Tesseract.js (Arabic + English)</span><span style="color:var(--safe);font-weight:700;">✓ Done</span></div>
+            <div class="progress-wrap"><div class="progress-bar" style="width:100%;animation:none;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:#64748B;">🧠 Gemini 2.5 Flash — Arabic clause extraction</span><span style="color:var(--warn);font-weight:700;" id="gemini-status">Processing...</span></div>
+            <div class="progress-wrap"><div class="progress-bar" style="animation-duration:2s;" id="gemini-bar"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:#64748B;">📚 Contextual RAG — KSA Labor Law match</span><span style="color:#94A3B8;font-weight:700;" id="rag-status">Waiting...</span></div>
+            <div class="progress-wrap"><div class="progress-bar" style="width:0;" id="rag-bar"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:#64748B;">🕸️ Graph RAG — Sponsor & Agency lookup</span><span style="color:#94A3B8;font-weight:700;" id="graph-status">Waiting...</span></div>
+            <div class="progress-wrap"><div class="progress-bar" style="width:0;" id="graph-bar"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:#64748B;">⚖️ Discrepancy Engine — Broker promise vs contract</span><span style="color:#94A3B8;font-weight:700;" id="disc-status">Waiting...</span></div>
+            <div class="progress-wrap"><div class="progress-bar" style="width:0;" id="disc-bar"></div></div>
+          </div>
+        </div>
+        
+        <div style="font-size:13px;color:#94A3B8;">সাধারণত ৩–৫ সেকেন্ড লাগে</div>
+      </div>
+    </div>
+    
+    <!-- PHASE 3: Results (7–20s) -->
+    <div class="phase" id="p3">
+      <div class="left-col">
+        <div style="font-size:18px;font-weight:900;color:var(--ink);">✅ অডিট সম্পন্ন — Triple-RAG রিপোর্ট</div>
+        
+        <!-- Risk Banner -->
+        <div class="risk-banner high">
+          <div>
+            <div class="risk-label">ঝুঁকি স্কোর (Risk Score)</div>
+            <div style="display:flex;align-items:baseline;gap:8px;">
+              <span class="risk-score">98</span>
+              <span style="font-size:14px;font-weight:700;color:var(--danger);">/ ১০০ — HIGH RISK</span>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+              <span class="engine-badge">🤖 Gemini 2.5 Flash</span>
+              <span class="engine-badge">📚 Contextual RAG</span>
+              <span class="engine-badge">🕸️ Graph RAG</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+            <div class="risk-tag">🚨 CRITICAL FRAUD DETECTED</div>
+            <button class="voice-btn">🔊 বাংলায় শুনুন</button>
+          </div>
+        </div>
+        
+        <!-- Discrepancy Grid -->
+        <div class="disc-grid">
+          <div class="disc-cell bad">
+            <div class="disc-label">আসল পেশা vs প্রতিশ্রুতি</div>
+            <div class="disc-value">Cleaner (عامل نظافة)</div>
+            <div class="disc-warn">⚠️ প্রতিশ্রুতি: Driver (সৌদি আর্ট. ৩৮)</div>
+          </div>
+          <div class="disc-cell bad">
+            <div class="disc-label">মাসিক বেতন (WPS)</div>
+            <div class="disc-value">SAR 800 <span style="color:var(--danger);font-size:11px;">(-68%)</span></div>
+            <div class="disc-warn">⚠️ প্রতিশ্রুত: SAR 2,500</div>
+          </div>
+          <div class="disc-cell bad">
+            <div class="disc-label">কফিল / নিয়োগকর্তা (Graph RAG)</div>
+            <div class="disc-value" style="font-size:12px;">Al-Bashaer Est.</div>
+            <div class="disc-warn">⚠️ Trust Score: 23/100 — HIGH RISK</div>
+          </div>
+          <div class="disc-cell bad">
+            <div class="disc-label">এজেন্সি স্ট্যাটাস (BMET)</div>
+            <div class="disc-value" style="font-size:12px;">হাসান দালাল</div>
+            <div class="disc-warn">🚨 অননুমোদিত — রেজিস্ট্রেশন নেই</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="right-col">
+        <div class="card-title" style="margin-bottom:8px;">⚠️ শনাক্তকৃত আইনি ঝুঁকি (৫টি):</div>
+        
+        <div class="finding">
+          <div class="finding-head"><span class="finding-title">পেশা পরিবর্তন (Bait-and-Switch)</span><span class="finding-citation">Art. 38</span></div>
+          <div class="finding-desc">ড্রাইভার চুক্তি করে ক্লিনার পাঠানো — সৌদি শ্রম আইন অনুযায়ী অবৈধ।</div>
+        </div>
+        
+        <div class="finding">
+          <div class="finding-head"><span class="finding-title">বেতন জালিয়াতি (Whiteout detected)</span><span class="finding-citation">Art. 90 · WPS</span></div>
+          <div class="finding-desc">৮০০ SAR — হোয়াইটআউট দিয়ে ২৫০০ মুছে লেখা হয়েছে। অর্থ আটকানো বেআইনি।</div>
+        </div>
+        
+        <div class="finding">
+          <div class="finding-head"><span class="finding-title">পাসপোর্ট জব্দ ক্লজ</span><span class="finding-citation">Decision 166</span></div>
+          <div class="finding-desc">নিয়োগকর্তার কাছে পাসপোর্ট জমা রাখতে বাধ্য করা — সর্বোচ্চ ২০,০০০ SAR জরিমানা।</div>
+        </div>
+        
+        <div class="finding">
+          <div class="finding-head"><span class="finding-title">বার্ষিক ছুটি অস্বীকার</span><span class="finding-citation">Art. 109</span></div>
+          <div class="finding-desc">২৪ মাস আগে কোনো ছুটি নেই — শ্রম আইন লঙ্ঘন (২১-৩০ দিন/বছর বাধ্যতামূলক)।</div>
+        </div>
+        
+        <div class="finding">
+          <div class="finding-head"><span class="finding-title">অনিবন্ধিত দালাল ফি (৳৩.৫ লাখ)</span><span class="finding-citation">Emigration Act 2013</span></div>
+          <div class="finding-desc">সরকার-নির্ধারিত সীমার বাইরে দালাল ফি আদায় — বাংলাদেশ আইনে দণ্ডনীয়।</div>
+        </div>
+        
+        <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:14px;margin-top:4px;">
+          <div style="font-size:12px;font-weight:700;color:var(--danger);margin-bottom:8px;">🎙️ বাংলা ভয়েস সামারি (AI Generated):</div>
+          <div style="font-size:11px;color:#7F1D1D;line-height:1.6;">"সাবধান! এই চুক্তিতে মারাত্মক প্রতারণা আছে। আপনার পেশা ড্রাইভার থেকে ক্লিনারে বদলানো হয়েছে। বেতন ২৫০০ রিয়াল থেকে কমিয়ে মাত্র ৮০০ রিয়াল করা হয়েছে। এই চুক্তিতে সই করবেন না।"</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Timeline bar -->
+    <div class="timeline"><div class="timeline-fill"></div></div>
+  </div>
+</div>
+
+<script>
+// Animate through phases
+const phases = ['p1','p2','p3'];
+let current = 0;
+
+function showPhase(id) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// Phase timings (ms)
+setTimeout(() => {
+  showPhase('p2');
+  // Animate processing steps
+  setTimeout(() => {
+    document.getElementById('gemini-status').textContent = '✓ Done';
+    document.getElementById('gemini-status').style.color = 'var(--safe)';
+    document.getElementById('rag-status').textContent = 'Processing...';
+    document.getElementById('rag-status').style.color = 'var(--warn)';
+    document.getElementById('rag-bar').style.animation = 'spinBar 1.5s ease forwards';
+  }, 2000);
+  setTimeout(() => {
+    document.getElementById('rag-status').textContent = '✓ Done';
+    document.getElementById('rag-status').style.color = 'var(--safe)';
+    document.getElementById('graph-status').textContent = 'Processing...';
+    document.getElementById('graph-status').style.color = 'var(--warn)';
+    document.getElementById('graph-bar').style.animation = 'spinBar 1.2s ease forwards';
+  }, 3500);
+  setTimeout(() => {
+    document.getElementById('graph-status').textContent = '✓ Done';
+    document.getElementById('graph-status').style.color = 'var(--safe)';
+    document.getElementById('disc-status').textContent = 'Processing...';
+    document.getElementById('disc-status').style.color = 'var(--warn)';
+    document.getElementById('disc-bar').style.animation = 'spinBar 1s ease forwards';
+  }, 4700);
+  setTimeout(() => {
+    document.getElementById('disc-status').textContent = '✓ Done';
+    document.getElementById('disc-status').style.color = 'var(--safe)';
+  }, 5700);
+}, 3000);
+
+setTimeout(() => { showPhase('p3'); }, 7000);
+
+// Loop
+setTimeout(() => { showPhase('p1'); }, 20000);
+setTimeout(() => {
+  showPhase('p2');
+  // reset bars
+  ['rag-bar','graph-bar','disc-bar'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.animation = 'none'; el.style.width = '0';
+  });
+  ['gemini-status','rag-status','graph-status','disc-status'].forEach((id,i) => {
+    document.getElementById(id).textContent = i===0 ? '✓ Done' : 'Waiting...';
+    document.getElementById(id).style.color = i===0 ? 'var(--safe)' : '#94A3B8';
+  });
+}, 21000);
+</script>
+</body>
+</html>

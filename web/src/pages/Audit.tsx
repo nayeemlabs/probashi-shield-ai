@@ -6,6 +6,13 @@ import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/fi
 import { uploadContract, fileUrl, analyzeContract } from '../lib/api'
 import { evaluateAuditWithRAG, type FullAuditReport } from '../lib/rag'
 
+const ENGINE_LABEL: Record<string, string> = {
+  'gemini-2.5-flash': 'Gemini 2.5 Flash',
+  'groq-llama4-scout': 'Groq Llama 4 Scout',
+  llava: 'LLaVA (fallback — কম নির্ভুল)',
+  'local-rag': 'লোকাল RAG',
+}
+
 export default function Audit() {
   const { user } = useAuth()
   const [file, setFile] = useState<File | null>(null)
@@ -19,6 +26,7 @@ export default function Audit() {
   const [forensics, setForensics] = useState<{ score: number; heat: string | null } | null>(null)
   const [ocrText, setOcrText] = useState('')
   const [ocrBusy, setOcrBusy] = useState(false)
+  const [engine, setEngine] = useState('')
 
   function playVoiceSummary(text: string) {
     if (!('speechSynthesis' in window)) return
@@ -89,6 +97,7 @@ export default function Audit() {
     setOcrText('')
     setRagReport(null)
     setReport('')
+    setEngine('')
     if (f.type === 'image/jpeg' || f.type === 'image/png') runELA(f)
     if (f.type.startsWith('image/')) runOCR(f)
   }
@@ -116,8 +125,9 @@ export default function Audit() {
       setRagReport(localRag)
 
       try {
-        const analysis = await analyzeContract(key, ocrText || undefined, promise || undefined)
+        const { analysis, engine: usedEngine } = await analyzeContract(key, ocrText || undefined, promise || undefined)
         setReport(analysis)
+        setEngine(usedEngine)
         const combinedRag = evaluateAuditWithRAG({
           documentText: `${ocrText} ${analysis}`,
           brokerPromise: promise,
@@ -125,6 +135,7 @@ export default function Audit() {
         setRagReport(combinedRag)
         await updateDoc(doc(db, 'audits', ref.id), {
           aiReport: analysis,
+          engine: usedEngine,
           ragScore: combinedRag.riskScore,
           ragRisk: combinedRag.overallRisk,
           status: 'done',
@@ -134,6 +145,7 @@ export default function Audit() {
         setMsg('অডিট সম্পন্ন! নিচে AI ও ট্রিপল-RAG রিপোর্ট দেখুন।')
       } catch {
         setReport(localRag.factBasedReportMarkdown)
+        setEngine('local-rag')
         await updateDoc(doc(db, 'audits', ref.id), {
           aiReport: localRag.factBasedReportMarkdown,
           ragScore: localRag.riskScore,
@@ -144,9 +156,11 @@ export default function Audit() {
         setState('done')
         setMsg('অডিট সম্পন্ন (লোকাল নলেজ RAG ইঞ্জিন দ্বারা বিশ্লেষণকৃত)। নিচে রিপোর্ট দেখুন।')
       }
-    } catch {
+    } catch (err) {
+      console.error('[Audit] upload/analyze error:', err)
       setState('error')
-      setMsg('আপলোড ব্যর্থ হয়েছে। আবার চেষ্টা করুন।')
+      const msg = String((err as Error)?.message ?? err)
+      setMsg(`আপলোড ব্যর্থ: ${msg.slice(0, 150)}`)
     }
   }
 
@@ -316,6 +330,11 @@ export default function Audit() {
             {report && (
               <div className="rounded-2xl border border-brand/30 bg-brand/5 p-6">
                 <h3 className="mb-2 font-bold text-brand">AI অডিট পূর্ণাঙ্গ রিপোর্ট</h3>
+                {engine && (
+                  <p className="mb-3 inline-block rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-ink/60">
+                    বিশ্লেষণ ইঞ্জিন: {ENGINE_LABEL[engine] ?? engine}
+                  </p>
+                )}
                 <div className="whitespace-pre-wrap text-sm leading-relaxed text-ink/85">{report}</div>
               </div>
             )}
